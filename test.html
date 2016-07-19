@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Fast English Test</title>
+
+  <!-- React -->
+  <script src="https://fb.me/react-15.0.1.min.js"></script>
+  <script src="https://fb.me/react-dom-15.0.1.min.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/3.0.3/firebase.js"></script>
+
+  <!-- ReactFire -->
+  <script src="https://cdn.firebase.com/libs/reactfire/1.0.0/reactfire.min.js"></script>
+
+  <!-- Local Store -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/store.js/1.3.20/store.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/node-uuid/1.4.7/uuid.min.js"></script>
+
+  <!-- throw-in-the-towel -->
+  <script src="lib/throw-in-the-towel.min.js" charset="utf-8"></script>
+
+  <!-- mocha -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.0.0-1/mocha.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.0.0-1/mocha.min.css">
+
+  <!-- sinon -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sinon.js/1.15.4/sinon.min.js"></script>
+
+  <!-- should -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/should.js/9.0.2/should.min.js"></script>
+
+  <!-- Initialize the Firebase SDK -->
+  <script>
+      var config = {
+        apiKey: "AIzaSyDZvCOCv5TbgR3OZpchtbDcoNqCO3lLwyw",
+        authDomain: "fastenglish-f0814.firebaseapp.com",
+        databaseURL: "https://fastenglish-f0814.firebaseio.com",
+        storageBucket: "fastenglish-f0814.appspot.com",
+      };
+      firebase.initializeApp(config);
+    </script>
+
+</head>
+
+<body>
+  <div id="mocha"></div>
+  <script>mocha.setup('bdd')</script>
+
+  <!-- Custom JS -->
+  <script src="js/engine.js"></script>
+  <script>
+    //mocha.checkLeaks();
+    mocha.run();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,337 @@
+/* Color pallete */
+@frontcolor: #c9c9c9;
+@backcolor: #1d1f20;
+@invertedcolor: @backcolor;
+@positive: #60D394;
+@negative: #E26D5C;
+@secondary: #ddca7e;
+@easy: #60D394;
+@medium: #3B8EA5;
+@hard: #E26D5C;
+
+/* Export color variables to javascript */
+@colors: ~'frontcolor', ~'backcolor', ~'invertedcolor', ~'positive', ~'negative', ~'secondary', ~'easy', ~'medium', ~'hard';
+
+.for(@list, @code) {
+    & {
+        .loop(@i:1) when (@i =< length(@list)) {
+            @value: extract(@list, @i);
+            @code();
+            .loop(@i + 1);
+        }
+        .loop();
+    }
+}
+
+.for(@colors, {
+    .colors-@{value} {
+        color: @@value;
+    }
+});
+
+/* Styles */
+
+/* Reset */
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background-color: @backcolor;
+    color: @frontcolor;
+    font-family: 'Inconsolata', 'Open Sans', sans-serif;
+}
+
+/* Display table structure */
+.wrapper {
+    display: table;
+    height: 100%;
+    text-align: center;
+    width: 100%;
+}
+
+.header {
+    background: @backcolor;
+    display: table-row;
+    height: 50px;
+}
+
+.header h1 {
+    margin: 30px;
+    font-size: 40px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0px darken(@frontcolor, 20%);
+}
+
+.main {
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+
+.box {
+    display: table-cell;
+}
+
+.content {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.sidebar {
+    background: @backcolor;
+    vertical-align: middle;
+    width: 100px;
+}
+
+
+
+/* Content classes */
+
+.middle {
+    margin: auto;
+}
+
+.middle h2 {
+    margin: 20px;
+    font-size: 24px;
+}
+
+.middle-bottom {
+    margin: auto;
+    padding-top: 50px;
+    min-height: 60px;
+}
+
+ul.no-bullets li {
+    list-style-type: none;
+}
+
+li.spaced {
+    margin: 5px 80px 5px 0px;
+}
+
+li a, li a:visited {
+    color: @frontcolor;
+    text-decoration: none;
+}
+
+li a:hover {
+    text-decoration: underline;
+}
+
+.optionGroupTitle {
+    display: block;
+    margin: 10px;
+}
+
+.optionGroupTitle .title {
+    font-weight: bold;
+}
+
+.message {
+    border: 4px solid;
+    border-radius: 0px 0px 5px 5px;
+    -webkit-border-radius: 0px 0px 5px 5px;
+    -moz-border-radius: 0px 0px 5px 5px;
+    -ms-border-radius: 0px 0px 5px 5px;
+    -o-border-radius: 0px 0px 5px 5px;
+    display: inline-block;
+    padding: 5px;
+}
+
+.message b {
+    font-weight: bold;
+}
+
+.success {
+    background: @positive;
+    color: @invertedcolor;
+    border-color: @positive;
+    box-shadow: 0px 6px darken(@positive, 20%);
+}
+
+.fail {
+    background: @negative;
+    color: @invertedcolor;
+    border-color: @negative;
+    box-shadow: 0px 6px darken(@negative, 20%);
+}
+
+.info {
+    background: @frontcolor;
+    color: @backcolor;
+    border-color: @frontcolor;
+    box-shadow: 0px 6px darken(@frontcolor, 20%);
+}
+
+.result {
+    margin: 10px;
+}
+
+.result span {
+    margin: 10px;
+    display: block;
+}
+
+.result span b {
+    font-weight: bold;
+}
+
+.progressBar {
+    width: 0%;
+    height: 10px;
+    background-color: @positive;
+}
+
+.textboxDefault[type='text'], .textboxDefault[type='password'] {
+    color: @frontcolor;
+    margin: 0px;
+    font-size: 15px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    -webkit-border-radius: none;
+    -moz-border-radius: none;
+    -ms-border-radius: none;
+    -o-border-radius: none;
+    border-radius: none;
+    background-color: @backcolor;
+    padding: 10px;
+    border: 0px;
+    border-bottom: solid 2px @frontcolor;
+}
+
+.textboxDefault[type='text']:focus, .textboxDefault[type='password']:focus {
+    outline: none;
+    border-bottom: solid 4px @frontcolor;
+}
+
+.btnDefault[type='button'] {
+    border: 0px;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 10px 30px;
+    display: inline-block;
+    margin: 15px 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    outline: none;
+    position: relative;
+    background: @secondary;
+    color: @invertedcolor;
+    box-shadow: 0px 6px darken(@secondary, 20%);
+    -webkit-transition: none;
+    -moz-transition: none;
+    transition: none;
+    border-radius: 0px 0px 5px 5px;
+}
+
+.btnDefault[type='button']:after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.btnDefault[type='button']:hover {
+    box-shadow: 0px 4px darken(@secondary, 20%);
+    top: 2px;
+}
+
+.btnDefault[type='button']:active {
+    box-shadow: 0px 0px darken(@secondary, 20%);
+    top: 6px;
+}
+
+.btnDefault[type='button']:disabled {
+    color: darken(@frontcolor, 5%);
+    background: darken(@secondary,30%);
+    box-shadow: 0px 6px darken(@secondary, 50%);
+}
+
+.radioDefault[type='radio'] {
+    display: none;
+}
+
+.radioDefault[type='radio'] + label {
+    font-size: 12px;
+}
+
+.radioDefault[type="radio"] + label span {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    margin: -1px 2px 0px 0px;
+    vertical-align: middle;
+    cursor: pointer;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    border: 2px solid @secondary;
+    background-color: @secondary;
+
+}
+
+.radioDefault[type="radio"]:checked + label span {
+    background-color: darken(@secondary, 20%);
+}
+
+.radioDefault[type="radio"] + label span,
+.radioDefault[type="radio"]:checked + label span {
+    -webkit-transition: background-color 0.2s linear;
+    -o-transition: background-color 0.2s linear;
+    -moz-transition: background-color 0.2s linear;
+    transition: background-color 0.2s linear;
+}
+
+.tooltip {
+    background: @frontcolor;
+    color: @backcolor;
+    box-shadow: 0px 6px darken(@frontcolor, 20%);
+    border: 4px solid @frontcolor;
+    border-radius: 0px 0px 5px 5px;
+    -webkit-border-radius: 0px 0px 5px 5px;
+    -moz-border-radius: 0px 0px 5px 5px;
+    -ms-border-radius: 0px 0px 5px 5px;
+    -o-border-radius: 0px 0px 5px 5px;
+    display: inline-block;
+    margin: -2px;
+    padding: 5px;
+    text-align: left;
+}
+
+.tooltip p {
+    margin: 5px;
+    letter-spacing: .5px;
+    font-size: 13px;
+}
+
+.tooltip p b {
+    font-weight: bold;
+}
+
+.footer {
+    background: @backcolor;
+    display: table-row;
+    height: 204px;
+    margin: 0px;
+    padding: 0px;
+    vertical-align: bottom;
+}
+
+.footerWrapper {
+    vertical-align: bottom;
+}

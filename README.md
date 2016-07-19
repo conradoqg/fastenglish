@@ -1,0 +1,50 @@
+# Fast English
+>A retro-game-ish-like English test that teaches through repetition.
+
+You can view a live version of the app [here](http://fastenglish.conradoqg.eti.br).
+
+## Contribute
+
+### For Developers
+
+Send a pull request to this repository, updating the `data/questions.json` with your new questions.
+
+### For English Ninjas
+
+Open a issue [here](https://gitlab.com/conradoqg/fastenglish/issues) suggesting new questions.
+
+### Issues
+
+When you find issues, please report them [here](https://gitlab.com/conradoqg/fastenglish/issues).
+
+## Deploying your own version
+
+### Steps
+1. Create a [Firebase](http://firebase.google.com) account and update the HTML files with your firebase config;
+2. Set the rule bellow to the main database, replacing the `<admin_uid>` with a UID of an admin user;
+```json
+{
+  "rules": {
+    ".read": true,
+    ".write": "auth != null && (auth.uid == '<admin_uid>')",
+    "questions": {
+      ".indexOn": ["level"]
+    }
+  }
+}
+```
+3. Add your domain to the firebase database;
+4. You need to serve the app using a static web server;
+5. Access the `admin.html` page to login (using admin e-mail and password) and populate the database;
+
+## Contribution and License Agreement
+
+If you contribute code to this project, you are implicitly allowing your code
+to be distributed under the MIT license. You are also implicitly verifying that
+all code is your original work.
+
+## License
+
+Copyright (c) 2016-2016, Conrado Quilles Gomes. (MIT License)
+
+See LICENSE for more info.
