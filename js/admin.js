@@ -43,11 +43,16 @@ var AdminView = React.createClass({
         this.clearDatabase().then(function () {
             var ref = firebase.database().ref('questions');
             return new Promise(function (fulfill, reject) {
-                try {
-                $.getJSON('data/questions.json', function (data) {
-                    fulfill(data);
+                $.ajax({
+                    url: 'data/questions.json',
+                    dataType: 'json',
+                    error: function (xhr, errorType, error) {
+                        reject(error);
+                    },
+                    success: function (data, status, xhr) {
+                        fulfill(data);
+                    }
                 });
-                } catch (exception) { reject(exception); }
             }).then(function (questions) {
                 return Promise.all(questions.map(function (record) {
                     return ref.push().set(record)
@@ -139,7 +144,7 @@ var AdminView = React.createClass({
                         messageType: null,
                         message: ''
                     })
-                }, 3000);
+                }, 6000);
             }
         }
 
