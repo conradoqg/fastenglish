@@ -12,7 +12,9 @@
         },
         "sourceType": "module"
     },
-    "globals": {},
+    "globals": {
+        "$": true
+    },
     "rules": {
         "no-const-assign": "warn",
         "no-this-before-super": "warn",
