@@ -28,7 +28,7 @@ function getColors(prefix) {
         for (var x = 0; x < classesLength; x++) {
             if (classes[x].selectorText && classes[x].selectorText.startsWith(prefix)) {
                 if (classes[x].style && classes[x].style.color) {
-                    colors[classes[x].selectorText.substr(prefix.length + 1)] = classes[x].style.color
+                    colors[classes[x].selectorText.substr(prefix.length + 1)] = classes[x].style.color;
                 }
             }
         }
@@ -37,8 +37,8 @@ function getColors(prefix) {
 }
 
 function rgbToHex(a) {
-    a = a.replace(/[^\d,]/g, "").split(",");
-    return "#" + ((1 << 24) + (+a[0] << 16) + (+a[1] << 8) + +a[2]).toString(16).slice(1)
+    a = a.replace(/[^\d,]/g, '').split(',');
+    return '#' + ((1 << 24) + (+a[0] << 16) + (+a[1] << 8) + +a[2]).toString(16).slice(1);
 }
 
 function progressBarUpdate(id, color0, color1, percentage) {
@@ -78,7 +78,7 @@ function average(array) {
         sum += parseFloat(array[i]); ++j;
     }
     return j ? sum / j : 0;
-};
+}
 
 function createChart() {
     var windowResizeTimer = null;
@@ -95,6 +95,8 @@ function createChart() {
 
     $(window).resize(setTimer);
 }
+
+const HistoryStorage = require('../engine/historyStorage');
 
 function drawChart() {
     var options = null;
@@ -133,7 +135,7 @@ function drawChart() {
     for (var index in rawData) {
         var rawRecord = rawData[index];
         if (!rawRecord.version || rawRecord.version == '1') {
-            var formatedDate = moment(parseInt(rawRecord.date)).format('L')
+            var formatedDate = moment(parseInt(rawRecord.date)).format('L');
 
             if (!calculatedData[formatedDate]) {
                 calculatedData[formatedDate] = {};
@@ -160,7 +162,7 @@ function drawChart() {
         '<div class="tooltip">Initial</div>',
     ]);
 
-    for (var index in calculatedData) {
+    for (index in calculatedData) {
         var calculatedRecord = calculatedData[index];
         data.addRow([
             index,
@@ -171,7 +173,6 @@ function drawChart() {
             calculatedRecord['HARD'].average,
             createCustomHTMLContent('HARD', index, calculatedRecord['HARD']),
         ]);
-        first = false;
     }
 
     function createCustomHTMLContent(level, date, value) {
@@ -224,3 +225,14 @@ function drawChart() {
     chartElement.innerHTML = '';
     chart.draw(data, options);
 }
+
+module.exports = {
+    drawChart,
+    createChart,
+    average,
+    fail,
+    success,
+    progressBarUpdate,
+    rgbToHex,
+    getColors
+};
