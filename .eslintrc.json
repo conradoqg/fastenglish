@@ -13,7 +13,13 @@
         "sourceType": "module"
     },
     "globals": {
-        "$": true
+        "$": true,
+        "moment": true,
+        "uuid": true,
+        "store": true,
+        "firebase": true,
+        "Howl": true,
+        "google": true
     },
     "rules": {
         "no-const-assign": "warn",

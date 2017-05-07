@@ -1,6 +1,6 @@
 class HistoryStorage {
     load() {
-        var challengesHistory = store.get('challengesHistory') || {}
+        var challengesHistory = store.get('challengesHistory') || {};
         return challengesHistory;
     }
 

@@ -15,7 +15,7 @@ var AdminView = React.createClass({
         else {
             this.setState({
                 isLogging: true
-            })
+            });
         }
     },
 
@@ -29,12 +29,12 @@ var AdminView = React.createClass({
             self.setState({
                 messageType: '1',
                 message: 'Questions table removed successfully!'
-            })
+            });
         }).catch(function (error) {
             self.setState({
                 messageType: '2',
                 message: 'Error while removing questions: ' + error.message
-            })
+            });
         });
     },
 
@@ -55,19 +55,19 @@ var AdminView = React.createClass({
                 });
             }).then(function (questions) {
                 return Promise.all(questions.map(function (record) {
-                    return ref.push().set(record)
+                    return ref.push().set(record);
                 }));
             });
         }).then(function () {
             self.setState({
                 messageType: '1',
                 message: 'Questions table records added successfully!'
-            })
+            });
         }).catch(function (error) {
             self.setState({
                 messageType: '2',
                 message: 'Error while adding questions: ' + error.message
-            })
+            });
         });
     },
 
@@ -122,11 +122,11 @@ var AdminView = React.createClass({
         if (this.state.isLogging) {
             content = (
                 <form>
-                    <label>User: <input tabIndex='1' autoFocus type='text' id='usernameText' className='textboxDefault' value={this.state.username} onChange={this.onChangeUsername} placeholder='Username'/></label>
-                    <label>Password: <input tabIndex='2' type='password' id='passwordText' className='textboxDefault'  value={this.state.password} onChange={this.onChangePassword} placeholder=''/></label>
-                    <input type='button' tabIndex='3' className='btnDefault' onClick={this.onConfirmLogin} value='Confirm'/>
+                    <label>User: <input tabIndex='1' autoFocus type='text' id='usernameText' className='textboxDefault' value={this.state.username} onChange={this.onChangeUsername} placeholder='Username' /></label>
+                    <label>Password: <input tabIndex='2' type='password' id='passwordText' className='textboxDefault' value={this.state.password} onChange={this.onChangePassword} placeholder='' /></label>
+                    <input type='button' tabIndex='3' className='btnDefault' onClick={this.onConfirmLogin} value='Confirm' />
                 </form>
-            )
+            );
         };
 
         if (this.state.messageType) {
@@ -143,7 +143,7 @@ var AdminView = React.createClass({
                     self.setState({
                         messageType: null,
                         message: ''
-                    })
+                    });
                 }, 6000);
             }
         }
@@ -152,9 +152,9 @@ var AdminView = React.createClass({
             <div className='wrapper'>
                 <div className="main">
                     <div className="box content">
-                        <input type='button' className='btnDefault' onClick={this.onAuthClickHandler} value={(this.state.logged ? 'Logout' : 'Login') }/>
-                        <input type='button' className='btnDefault' onClick={this.onClearDataHandler} value='Clear Data'/>
-                        <input type='button' className='btnDefault' onClick={this.onInsertTestDataHandler} value='Insert Base Questions'/>
+                        <input type='button' className='btnDefault' onClick={this.onAuthClickHandler} value={(this.state.logged ? 'Logout' : 'Login')} />
+                        <input type='button' className='btnDefault' onClick={this.onClearDataHandler} value='Clear Data' />
+                        <input type='button' className='btnDefault' onClick={this.onInsertTestDataHandler} value='Insert Base Questions' />
                         {content}
                         {message}
                     </div>
@@ -163,4 +163,4 @@ var AdminView = React.createClass({
     }
 });
 
-ReactDOM.render(<AdminView/>, document.getElementById('app'));
+ReactDOM.render(<AdminView />, document.getElementById('app'));
