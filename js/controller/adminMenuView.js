@@ -1,29 +1,43 @@
-var AdminView = React.createClass({
-    getInitialState: function () {
-        return {
+const { Component } = require('react');
+const React = require('react');
+
+class AdminMenuView extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             username: '',
             password: '',
             logged: firebase.auth().currentUser != null,
             isLogging: false,
             message: '',
             messageType: null,
-        }
-    },
+        };
+        this.onAuthClickHandler = this.onAuthClickHandler.bind(this);
+        this.clearDatabase = this.clearDatabase.bind(this);
+        this.onClearDataHandler = this.onClearDataHandler.bind(this);
+        this.onInsertTestDataHandler = this.onInsertTestDataHandler.bind(this);
+        this.onChangeUsername = this.onChangeUsername.bind(this);
+        this.onChangePassword = this.onChangePassword.bind(this);
+        this.login = this.login.bind(this);
+        this.logout = this.logout.bind(this);
+        this.onConfirmLogin = this.onConfirmLogin.bind(this);
+        this.backHandler = this.backHandler.bind(this);
+    }
 
-    onAuthClickHandler: function () {
+    onAuthClickHandler() {
         if (this.state.logged) this.logout();
         else {
             this.setState({
                 isLogging: true
             });
         }
-    },
+    }
 
-    clearDatabase: function () {
+    clearDatabase() {
         return firebase.database().ref('questions').remove();
-    },
+    }
 
-    onClearDataHandler: function () {
+    onClearDataHandler() {
         var self = this;
         this.clearDatabase().then(function () {
             self.setState({
@@ -36,9 +50,9 @@ var AdminView = React.createClass({
                 message: 'Error while removing questions: ' + error.message
             });
         });
-    },
+    }
 
-    onInsertTestDataHandler: function () {
+    onInsertTestDataHandler() {
         var self = this;
         this.clearDatabase().then(function () {
             var ref = firebase.database().ref('questions');
@@ -49,7 +63,7 @@ var AdminView = React.createClass({
                     error: function (xhr, errorType, error) {
                         reject(error);
                     },
-                    success: function (data, status, xhr) {
+                    success: function (data) {
                         fulfill(data);
                     }
                 });
@@ -69,17 +83,17 @@ var AdminView = React.createClass({
                 message: 'Error while adding questions: ' + error.message
             });
         });
-    },
+    }
 
-    onChangeUsername: function (event) {
+    onChangeUsername(event) {
         this.setState({ username: event.target.value });
-    },
+    }
 
-    onChangePassword: function (event) {
+    onChangePassword(event) {
         this.setState({ password: event.target.value });
-    },
+    }
 
-    login: function (username, password) {
+    login(username, password) {
         var self = this;
         firebase.auth().signInWithEmailAndPassword(username, password).then(function (result) {
             self.setState({
@@ -97,9 +111,9 @@ var AdminView = React.createClass({
                 message: 'Authentication Failed!\n' + error.message
             });
         });
-    },
+    }
 
-    logout: function () {
+    logout() {
         var self = this;
         firebase.auth().signOut().then(function () {
             self.setState({
@@ -108,13 +122,17 @@ var AdminView = React.createClass({
                 message: 'Logged out successfully!'
             });
         });
-    },
+    }
 
-    onConfirmLogin: function () {
+    onConfirmLogin() {
         this.login(this.state.username, this.state.password);
-    },
+    }
 
-    render: function () {
+    backHandler() {
+        this.props.changeMenuTo('OPTIONS');
+    }
+
+    render() {
         var content = null;
         var message = null;
         var self = this;
@@ -127,7 +145,7 @@ var AdminView = React.createClass({
                     <input type='button' tabIndex='3' className='btnDefault' onClick={this.onConfirmLogin} value='Confirm' />
                 </form>
             );
-        };
+        }
 
         if (this.state.messageType) {
             var className = 'message';
@@ -155,12 +173,13 @@ var AdminView = React.createClass({
                         <input type='button' className='btnDefault' onClick={this.onAuthClickHandler} value={(this.state.logged ? 'Logout' : 'Login')} />
                         <input type='button' className='btnDefault' onClick={this.onClearDataHandler} value='Clear Data' />
                         <input type='button' className='btnDefault' onClick={this.onInsertTestDataHandler} value='Insert Base Questions' />
+                        <input type='button' className='btnDefault' onClick={this.backHandler} value='Back' />
                         {content}
                         {message}
                     </div>
                 </div>
             </div>);
     }
-});
+}
 
-ReactDOM.render(<AdminView />, document.getElementById('app'));
+module.exports = AdminMenuView;

@@ -6,10 +6,10 @@ class GameEngine {
         this.gameState = gameState;
     }
 
-    start(level, questionsAmount, maxTime, endOnTimeout) {
+    start(level, questionsAmount, maxTime, endOnTimeout, fetcherMock) {
         var self = this;
         this.gameState.state = 'CHALLENGING';
-        return challengeCreator(level, questionsAmount, maxTime, this.historyStorage).then(function (challenge) {
+        return challengeCreator(level, questionsAmount, maxTime, this.historyStorage, fetcherMock).then(function (challenge) {
             self.gameState.runningChallenge = challenge;
             self.gameState.runningChallenge.start(endOnTimeout);
         });

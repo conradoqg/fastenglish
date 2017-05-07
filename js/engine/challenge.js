@@ -1,4 +1,5 @@
 const { calculatePoints, getCorrectorByType } = require('./util');
+const uuid = require('uuid');
 
 class Challenge {
     constructor(level, qaPair, maxTime, historyStorage) {

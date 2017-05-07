@@ -7,6 +7,10 @@ class HistoryStorage {
     add(history) {
         store.set('challengesHistory', Object.assign(this.load(), history));
     }
+
+    clear() {
+        store.set('challengesHistory', {});
+    }
 }
 
 module.exports = HistoryStorage;

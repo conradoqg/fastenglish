@@ -31,10 +31,9 @@ class AppView extends Component {
             case 'MENU':
                 renderToContent = (<MenuView engine={this.state.gameEngine} gameStarted={this.gameStarted} />);
                 break;
-            case 'CHALLENGING':
-                renderToContent = (<ChallengeView engine={this.state.gameEngine} challenge={this.state.gameEngine.gameState.runningChallenge} gameEnded={this.gameEnded} />);
-                break;
+            case 'CHALLENGING':                
             default:
+                renderToContent = (<ChallengeView engine={this.state.gameEngine} challenge={this.state.gameEngine.gameState.runningChallenge} gameEnded={this.gameEnded} />);                         
                 break;
         }
 

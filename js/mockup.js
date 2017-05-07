@@ -29,11 +29,11 @@ $(document).ready(function () {
 
     initiate('progressBar', colors['positive'], colors['negative'])
 
-    window.HistoryStorage = function() {
+    window.HistoryStorage = function () {
 
     };
 
-    window.HistoryStorage.prototype.load = function() {
+    window.HistoryStorage.prototype.load = function () {
         return sampleData;
     }
 
