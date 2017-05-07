@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "budo ./js/index.js:dist/bundle.js --live -- -t node-lessify -t babelify",    
-    "build": "browserify ./js/index.js -t node-lessify -t babelify | uglifyjs > ./dist/bundle.js"    
+    "test": "mocha",
+    "start": "budo ./js/index.js:dist/bundle.js --live -- -t node-lessify -t babelify",
+    "build": "browserify ./js/index.js -t node-lessify -t babelify | uglifyjs > ./dist/bundle.js"
   },
   "repository": {
     "type": "git",
@@ -25,10 +25,13 @@
     "budo": "^10.0.3",
     "node-lessify": "^0.1.4",
     "rimraf": "^2.6.1",
+    "should": "^11.2.1",
+    "sinon": "^2.2.0",
     "uglify-js": "^2.8.22"
   },
   "dependencies": {
     "react": "^15.5.4",
-    "react-dom": "^15.5.4"
+    "react-dom": "^15.5.4",
+    "uuid": "^3.0.1"
   }
 }
