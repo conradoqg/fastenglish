@@ -104,6 +104,7 @@ class AdminMenuView extends Component {
                 messageType: '1',
                 message: 'Authenticated successfully!'
             });
+            $('#btnLogin').focus();
         }).catch(function (error) {
             self.setState({
                 logged: false,
@@ -132,6 +133,28 @@ class AdminMenuView extends Component {
         this.props.changeMenuTo('OPTIONS');
     }
 
+    handleKeyPress(e, previousId, nextId, topId, bottomId) {
+        let el = null;
+
+        if (e.keyCode == 39 && nextId) { // KEY_RIGHT
+            el = $('#' + nextId);
+        }
+        if (e.keyCode == 37 && previousId) { // KEY_LEFT
+            el = $('#' + previousId);
+        }
+        if (e.keyCode == 38 && topId) { // KEY_UP
+            el = $('#' + topId);
+        }
+        if (e.keyCode == 40 && bottomId) { // KEY_DOWN
+            el = $('#' + bottomId);
+        }
+
+        if (el) {
+            el.focus();
+            return false;
+        }
+    }
+
     render() {
         var content = null;
         var message = null;
@@ -140,9 +163,9 @@ class AdminMenuView extends Component {
         if (this.state.isLogging) {
             content = (
                 <form>
-                    <label>User: <input tabIndex='1' autoFocus type='text' id='usernameText' className='textboxDefault' value={this.state.username} onChange={this.onChangeUsername} placeholder='Username' /></label>
-                    <label>Password: <input tabIndex='2' type='password' id='passwordText' className='textboxDefault' value={this.state.password} onChange={this.onChangePassword} placeholder='' /></label>
-                    <input type='button' tabIndex='3' className='btnDefault' onClick={this.onConfirmLogin} value='Confirm' />
+                    <label>User: <input tabIndex='1' id='usernameText' autoFocus type='text' className='textboxDefault' value={this.state.username} onChange={this.onChangeUsername} placeholder='Username' onKeyDown={(e) => { return this.handleKeyPress(e, 'btnConfirm', 'passwordText', 'btnBack', 'btnLogin'); }} /></label>
+                    <label>Password: <input type='password' id='passwordText' tabIndex='2' className='textboxDefault' value={this.state.password} onChange={this.onChangePassword} placeholder='' onKeyDown={(e) => { return this.handleKeyPress(e, 'usernameText', 'btnConfirm', 'btnBack', 'btnLogin'); }} /></label>
+                    <input type='button' id='btnConfirm' tabIndex='3' className='btnDefault' onClick={this.onConfirmLogin} value='Confirm' onKeyDown={(e) => { return this.handleKeyPress(e, 'passwordText', 'usernameText', 'btnBack', 'btnLogin'); }} />
                 </form>
             );
         }
@@ -166,19 +189,14 @@ class AdminMenuView extends Component {
             }
         }
 
-        return (
-            <div className='wrapper'>
-                <div className="main">
-                    <div className="box content">
-                        <input type='button' className='btnDefault' onClick={this.onAuthClickHandler} value={(this.state.logged ? 'Logout' : 'Login')} />
-                        <input type='button' className='btnDefault' onClick={this.onClearDataHandler} value='Clear Data' />
-                        <input type='button' className='btnDefault' onClick={this.onInsertTestDataHandler} value='Insert Base Questions' />
-                        <input type='button' className='btnDefault' onClick={this.backHandler} value='Back' />
-                        {content}
-                        {message}
-                    </div>
-                </div>
-            </div>);
+        return (<div className="middle">
+            <input type='button' id='btnLogin' className='btnDefault' autoFocus onClick={this.onAuthClickHandler} value={(this.state.logged ? 'Logout' : 'Login')} onKeyDown={(e) => { return this.handleKeyPress(e, null, null, 'btnBack', 'btnClearData'); }} /><br />
+            <input type='button' id='btnClearData' className='btnDefault' onClick={this.onClearDataHandler} value='Clear Data' onKeyDown={(e) => { return this.handleKeyPress(e, null, null, 'btnLogin', 'btnInsertQuestions'); }} /><br />
+            <input type='button' id='btnInsertQuestions' className='btnDefault' onClick={this.onInsertTestDataHandler} value='Insert Base Questions' onKeyDown={(e) => { return this.handleKeyPress(e, null, null, 'btnClearData', 'btnBack'); }} /><br />
+            <input type='button' id='btnBack' className='btnDefault' onClick={this.backHandler} value='Back' onKeyDown={(e) => { return this.handleKeyPress(e, null, null, 'btnInsertQuestions', 'usernameText'); }} />
+            {content}
+            {message}
+        </div>);
     }
 }
 

@@ -37,6 +37,8 @@ class AppView extends Component {
                 break;
         }
 
+        setInterval(function() {console.log($(':focus')); }, 2000);
+
         var toRender = (
             <div className='wrapper'>
                 <div className="header">
@@ -50,8 +52,8 @@ class AppView extends Component {
                     </div>
                     <div className="box sidebar">
                         <ul className='no-bullets'>
-                            <li className='spaced'><a href='https://gitlab.com/conradoqg/fastenglish'>Contribute</a></li>
-                            <li className='spaced'><a href='http://conradoqg.eti.br'>Creator</a></li>
+                            <li className='spaced'><a tabIndex='-1' href='https://gitlab.com/conradoqg/fastenglish'>Contribute</a></li>
+                            <li className='spaced'><a tabIndex='-1' href='http://conradoqg.eti.br'>Creator</a></li>
                         </ul>
                     </div>
                 </div>

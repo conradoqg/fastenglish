@@ -252,6 +252,10 @@ li a:hover {
     top: 2px;
 }
 
+.btnDefault[type='button']:focus {
+    text-decoration: underline;
+}
+
 .btnDefault[type='button']:active {
     box-shadow: 0px 0px darken(@secondary, 20%);
     top: 6px;
@@ -295,6 +299,11 @@ li a:hover {
     -o-transition: background-color 0.2s linear;
     -moz-transition: background-color 0.2s linear;
     transition: background-color 0.2s linear;
+}
+
+.radioDefault[type="radio"] + label:focus {
+    outline: none;
+    text-decoration: underline;
 }
 
 .tooltip {
