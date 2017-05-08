@@ -1,50 +1,9 @@
-function getColors(prefix) {
-    var styleSheets = window.document.styleSheets;
-    var styleSheetsLength = styleSheets.length;
-    var colors = [];
-
-    for (var i = 0; i < styleSheetsLength; i++) {
-        var classes = null;
-        try {
-            // In Chrome, if stylesheet originates from a different domain,
-            // ss.cssRules simply won't exist. I believe the same is true for IE, but
-            // I haven't tested it.
-            //
-            // In Firefox, if stylesheet originates from a different domain, trying
-            // to access ss.cssRules will throw a SecurityError. Hence, we must use
-            // try/catch to detect this condition in Firefox.
-            classes = styleSheets[i].rules || styleSheets[i].cssRules;
-        } catch (e) {
-            // Rethrow exception if it's not a SecurityError. Note that SecurityError
-            // exception is specific to Firefox.
-            if (e.name !== 'SecurityError')
-                throw e;
-            return;
-        }
-
-        if (!classes)
-            continue;
-        var classesLength = classes.length;
-        for (var x = 0; x < classesLength; x++) {
-            if (classes[x].selectorText && classes[x].selectorText.startsWith(prefix)) {
-                if (classes[x].style && classes[x].style.color) {
-                    colors[classes[x].selectorText.substr(prefix.length + 1)] = classes[x].style.color;
-                }
-            }
-        }
-    }
-    return colors;
-}
-
-function rgbToHex(a) {
-    a = a.replace(/[^\d,]/g, '').split(',');
-    return '#' + ((1 << 24) + (+a[0] << 16) + (+a[1] << 8) + +a[2]).toString(16).slice(1);
-}
+const Theming = require('../util/theming');
 
 function progressBarUpdate(id, color0, color1, percentage) {
     var elem = document.getElementById(id);
-    if (color0.toLowerCase().startsWith('rgb')) color0 = rgbToHex(color0);
-    if (color1.toLowerCase().startsWith('rgb')) color1 = rgbToHex(color1);
+    if (color0.toLowerCase().startsWith('rgb')) color0 = Theming.rgbToHex(color0);
+    if (color1.toLowerCase().startsWith('rgb')) color1 = Theming.rgbToHex(color1);
     var r0 = parseInt(color0.substring(1, 3), 16);
     var g0 = parseInt(color0.substring(3, 5), 16);
     var b0 = parseInt(color0.substring(5, 7), 16);
@@ -61,16 +20,6 @@ function progressBarUpdate(id, color0, color1, percentage) {
     elem.style.backgroundColor = 'rgb(' + r0 + ',' + g0 + ',' + b0 + ')';
     elem.style.width = steps + '%';
 }
-
-var success = new Howl({
-    urls: ['media/success.mp3'],
-    volume: 0.2
-});
-
-var fail = new Howl({
-    urls: ['media/fail.mp3'],
-    volume: 0.2
-});
 
 function average(array) {
     var sum = 0, j = 0;
@@ -188,7 +137,7 @@ function drawChart() {
     options = {
         titlePosition: 'none',
         axisTitlesPosition: 'none',
-        backgroundColor: colors['backcolor'],
+        backgroundColor: Theming.getColor('backcolor'),
         pointsVisible: true,
         tooltip: { isHtml: true },
         areaOpacity: 1,
@@ -199,9 +148,9 @@ function drawChart() {
             top: '0'
         },
         series: {
-            0: { color: colors['easy'] },
-            1: { color: colors['medium'] },
-            2: { color: colors['hard'] },
+            0: { color: Theming.getColor('easy') },
+            1: { color: Theming.getColor('medium') },
+            2: { color: Theming.getColor('hard') },
         },
         isStacked: false,
         legend: {
@@ -229,10 +178,6 @@ function drawChart() {
 module.exports = {
     drawChart,
     createChart,
-    average,
-    fail,
-    success,
-    progressBarUpdate,
-    rgbToHex,
-    getColors
+    average,    
+    progressBarUpdate    
 };

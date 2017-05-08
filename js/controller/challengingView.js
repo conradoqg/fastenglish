@@ -1,5 +1,6 @@
 const { Component } = require('react');
-const { progressBarUpdate, success, fail, rgbToHex } = require('./util');
+const Theming = require('../util/theming');
+const { progressBarUpdate } = require('./util');
 const React = require('react');
 
 class ChallengingView extends Component {
@@ -23,10 +24,10 @@ class ChallengingView extends Component {
         this.interval = setInterval(function () {
             if (self.props.challenge.state == 'RUNNING') {
                 self.props.challenge.checkIfChallengedTimedout();
-                progressBarUpdate('progressBar', colors['positive'], colors['negative'], (100 * self.props.challenge.elapsedSeconds()) / self.props.challenge.maxTime);
+                progressBarUpdate('progressBar', Theming.getColor('positive'), Theming.getColor('negative'), (100 * self.props.challenge.elapsedSeconds()) / self.props.challenge.maxTime);
             } else if (self.props.challenge.state == 'ENDED') {
                 clearInterval(self.interval);
-                progressBarUpdate('progressBar', colors['positive'], colors['negative'], 100);
+                progressBarUpdate('progressBar', Theming.getColor('positive'), Theming.getColor('negative'), 100);
                 self.setState({
                     challenge: self.props.challenge
                 });
@@ -56,15 +57,15 @@ class ChallengingView extends Component {
         if (result != null) {
             this.props.challenge.nextQuestion();
             if (result.isCorrect) {
-                success.play();
+                Theming.getSound('success').play();
                 setTimeout(function () {
                     $('#anwserButton').velocity({
-                        borderBottomColor: rgbToHex(colors['positive'])
+                        borderBottomColor: Theming.getColor('positive')
                     }, 300).velocity({
-                        borderBottomColor: rgbToHex(colors['frontcolor'])
+                        borderBottomColor: Theming.getColor('frontcolor')
                     }, 1000);
                 }, 200);
-            } else fail.play();
+            } else Theming.getSound('fail').play();
         }
 
         this.setState({

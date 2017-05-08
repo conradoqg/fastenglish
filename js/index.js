@@ -3,12 +3,13 @@ const App = require('./engine/app');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const AppView = require('./controller/appView');
-const { getColors, createChart } = require('./controller/util');
+const Theming = require('./util/theming');
+const { createChart } = require('./controller/util');
 
-$(document).ready(function () {
-    window.colors = getColors('.colors');
+$(document).ready(function () {    
+    Theming.load('.colors');
     createChart();
-    window.app = new App();
-    window.app.start();
-    ReactDOM.render(<AppView app={window.app} />, document.getElementById('app'));
+    const app = new App();
+    app.start();
+    ReactDOM.render(<AppView app={app} />, document.getElementById('app'));
 });

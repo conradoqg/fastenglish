@@ -35,9 +35,7 @@ class AppView extends Component {
             default:
                 renderToContent = (<ChallengeView engine={this.state.gameEngine} challenge={this.state.gameEngine.gameState.runningChallenge} gameEnded={this.gameEnded} />);                         
                 break;
-        }
-
-        setInterval(function() {console.log($(':focus')); }, 2000);
+        }        
 
         var toRender = (
             <div className='wrapper'>
