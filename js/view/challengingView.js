@@ -1,6 +1,5 @@
 const { Component } = require('react');
 const Theming = require('../util/theming');
-const { progressBarUpdate } = require('./util');
 const React = require('react');
 
 class ChallengingView extends Component {
@@ -21,16 +20,14 @@ class ChallengingView extends Component {
 
     componentDidMount() {
         var self = this;
-        this.interval = setInterval(function () {
+        this.interval = setInterval(() => {
             if (self.props.challenge.state == 'RUNNING') {
                 self.props.challenge.checkIfChallengedTimedout();
-                progressBarUpdate('progressBar', Theming.getColor('positive'), Theming.getColor('negative'), (100 * self.props.challenge.elapsedSeconds()) / self.props.challenge.maxTime);
+                this.props.progressChanged((100 * self.props.challenge.elapsedSeconds()) / self.props.challenge.maxTime);
             } else if (self.props.challenge.state == 'ENDED') {
                 clearInterval(self.interval);
-                progressBarUpdate('progressBar', Theming.getColor('positive'), Theming.getColor('negative'), 100);
-                self.setState({
-                    challenge: self.props.challenge
-                });
+                self.setState({ challenge: self.props.challenge });
+                this.props.progressChanged(100);
             }
         }, 10);
     }

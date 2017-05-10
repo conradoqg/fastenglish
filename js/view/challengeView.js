@@ -35,7 +35,7 @@ class ChallengeView extends Component {
         switch (this.state.challenge.state) {
             case 'CREATED':
             case 'RUNNING':
-                return (<ChallengingView challenge={this.state.challenge} challengeEnded={this.challengeEnded} />);
+                return (<ChallengingView challenge={this.state.challenge} challengeEnded={this.challengeEnded} progressChanged={this.props.progressChanged}/>);
             case 'ENDED':
                 return (<ChallengeResultView challenge={this.state.challenge} endGame={this.endGame} restartChallenge={this.restartChallenge} />);
             default:

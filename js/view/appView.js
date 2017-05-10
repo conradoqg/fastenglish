@@ -2,22 +2,31 @@ const { Component } = require('react');
 const React = require('react');
 const MenuView = require('./menuView');
 const ChallengeView = require('./challengeView');
+const ProgressView = require('./progressView');
 
 class AppView extends Component {
     constructor(props) {
         super(props);
-        this.state = props.app;
+        this.state = {
+            app: props.app,
+            progress: null
+        }
         this.gameStarted = this.gameStarted.bind(this);
         this.gameEnded = this.gameEnded.bind(this);
+        this.progressChanged = this.progressChanged.bind(this);
         this.render = this.render.bind(this);
     }
-    
+
     gameStarted() {
         this.forceUpdate();
     }
 
     gameEnded() {
         this.forceUpdate();
+    }
+
+    progressChanged(progress) {
+        this.setState({ progress });
     }
 
     componentDidMount() {
@@ -27,20 +36,20 @@ class AppView extends Component {
     render() {
         var renderToContent = null;
 
-        switch (this.state.gameEngine.gameState.state) {
+        switch (this.state.app.gameEngine.gameState.state) {
             case 'MENU':
-                renderToContent = (<MenuView engine={this.state.gameEngine} gameStarted={this.gameStarted} />);
+                renderToContent = (<MenuView engine={this.state.app.gameEngine} gameStarted={this.gameStarted} />);
                 break;
-            case 'CHALLENGING':                
+            case 'CHALLENGING':
             default:
-                renderToContent = (<ChallengeView engine={this.state.gameEngine} challenge={this.state.gameEngine.gameState.runningChallenge} gameEnded={this.gameEnded} />);                         
+                renderToContent = (<ChallengeView engine={this.state.app.gameEngine} challenge={this.state.app.gameEngine.gameState.runningChallenge} gameEnded={this.gameEnded} progressChanged={this.progressChanged} />);
                 break;
-        }        
+        }
 
         var toRender = (
             <div className='wrapper'>
                 <div className="header">
-                    <div className='progressBar' id='progressBar'></div>
+                    <ProgressView progress={this.state.progress}></ProgressView>                    
                     <h1>Fast English!</h1>
                 </div>
                 <div className="main">

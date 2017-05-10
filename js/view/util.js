@@ -1,25 +1,5 @@
 const Theming = require('../util/theming');
-
-function progressBarUpdate(id, color0, color1, percentage) {
-    var elem = document.getElementById(id);
-    if (color0.toLowerCase().startsWith('rgb')) color0 = Theming.rgbToHex(color0);
-    if (color1.toLowerCase().startsWith('rgb')) color1 = Theming.rgbToHex(color1);
-    var r0 = parseInt(color0.substring(1, 3), 16);
-    var g0 = parseInt(color0.substring(3, 5), 16);
-    var b0 = parseInt(color0.substring(5, 7), 16);
-    var r1 = parseInt(color1.substring(1, 3), 16);
-    var g1 = parseInt(color1.substring(3, 5), 16);
-    var b1 = parseInt(color1.substring(5, 7), 16);
-    var steps = (100 - percentage);
-    var rstep = (r1 - r0) / (100);
-    var gstep = (g1 - g0) / (100);
-    var bstep = (b1 - b0) / (100);
-    r0 = Math.floor(r0 + (rstep * percentage));
-    g0 = Math.floor(g0 + (gstep * percentage));
-    b0 = Math.floor(b0 + (bstep * percentage));
-    elem.style.backgroundColor = 'rgb(' + r0 + ',' + g0 + ',' + b0 + ')';
-    elem.style.width = steps + '%';
-}
+const HistoryStorage = require('../engine/historyStorage');
 
 function average(array) {
     var sum = 0, j = 0;
@@ -44,8 +24,6 @@ function createChart() {
 
     $(window).resize(setTimer);
 }
-
-const HistoryStorage = require('../engine/historyStorage');
 
 function drawChart() {
     var options = null;
@@ -178,6 +156,5 @@ function drawChart() {
 module.exports = {
     drawChart,
     createChart,
-    average,    
-    progressBarUpdate    
+    average
 };
