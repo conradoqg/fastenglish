@@ -57,9 +57,9 @@ class ChallengingView extends Component {
                 Theming.getSound('success').play();
                 setTimeout(function () {
                     $('#anwserButton').velocity({
-                        borderBottomColor: Theming.getColor('positive')
+                        borderBottomColor: Theming.rgbToHex(Theming.getColor('positive'))
                     }, 300).velocity({
-                        borderBottomColor: Theming.getColor('frontcolor')
+                        borderBottomColor: Theming.rgbToHex(Theming.getColor('frontcolor'))
                     }, 1000);
                 }, 200);
             } else Theming.getSound('fail').play();
