@@ -1,5 +1,28 @@
+const { Component } = require('react');
+const React = require('react');
 const Theming = require('../util/theming');
-const HistoryStorage = require('../engine/historyStorage');
+
+class HistoryChartView extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount() {        
+        createChart(this.props.history);        
+    }        
+
+    componentDidUpdate() {        
+        drawChart(this.props.history);
+    }
+
+    shouldComponentUpdate(nextProps) {
+        return nextProps.history !== this.props.history;
+    }
+
+    render() {
+        return (<div className='footerWrapper' id='chart'></div>);
+    }
+}
 
 function average(array) {
     var sum = 0, j = 0;
@@ -9,30 +32,29 @@ function average(array) {
     return j ? sum / j : 0;
 }
 
-function createChart() {
+function createChart(historyData) {
     var windowResizeTimer = null;
 
     google.charts.load('current', {
         'packages': ['corechart']
     });
-    google.charts.setOnLoadCallback(drawChart);
+    google.charts.setOnLoadCallback(() => drawChart(historyData));
 
     var setTimer = function () {
         clearTimeout(windowResizeTimer);
-        windowResizeTimer = setTimeout(drawChart, 100);
+        windowResizeTimer = setTimeout(() => drawChart(historyData), 100);
     };
 
     $(window).resize(setTimer);
 }
 
-function drawChart() {
+function drawChart(historyData) {
     var options = null;
     var chart = null;
     var data = null;
-    var rawData = null;
-    var historyStorage = new HistoryStorage();
+    var rawData = null;    
 
-    rawData = historyStorage.load();
+    rawData = historyData;
 
     if (!rawData) return;
 
@@ -153,8 +175,4 @@ function drawChart() {
     chart.draw(data, options);
 }
 
-module.exports = {
-    drawChart,
-    createChart,
-    average
-};
+module.exports = HistoryChartView;

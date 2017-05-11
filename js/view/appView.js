@@ -3,18 +3,23 @@ const React = require('react');
 const MenuView = require('./menuView');
 const ChallengeView = require('./challengeView');
 const ProgressView = require('./progressView');
+const HistoryChartView = require('./historyChartView');
+const HistoryStorage = require('../engine/historyStorage');
 
 class AppView extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            app: props.app,
-            progress: null
-        }
+        this.historyStorage = new HistoryStorage();
         this.gameStarted = this.gameStarted.bind(this);
         this.gameEnded = this.gameEnded.bind(this);
         this.progressChanged = this.progressChanged.bind(this);
+        this.historyChanged = this.historyChanged.bind(this);
         this.render = this.render.bind(this);
+        this.state = {
+            app: props.app,
+            progress: null,
+            history: this.historyStorage.load()
+        };
     }
 
     gameStarted() {
@@ -29,8 +34,8 @@ class AppView extends Component {
         this.setState({ progress });
     }
 
-    componentDidMount() {
-
+    historyChanged() {
+        this.setState({ history: this.historyStorage.load() });
     }
 
     render() {
@@ -42,14 +47,14 @@ class AppView extends Component {
                 break;
             case 'CHALLENGING':
             default:
-                renderToContent = (<ChallengeView engine={this.state.app.gameEngine} challenge={this.state.app.gameEngine.gameState.runningChallenge} gameEnded={this.gameEnded} progressChanged={this.progressChanged} />);
+                renderToContent = (<ChallengeView engine={this.state.app.gameEngine} challenge={this.state.app.gameEngine.gameState.runningChallenge} gameEnded={this.gameEnded} progressChanged={this.progressChanged} historyChanged={this.historyChanged} />);
                 break;
         }
 
         var toRender = (
             <div className='wrapper'>
                 <div className="header">
-                    <ProgressView progress={this.state.progress}></ProgressView>                    
+                    <ProgressView progress={this.state.progress}></ProgressView>
                     <h1>Fast English!</h1>
                 </div>
                 <div className="main">
@@ -65,7 +70,7 @@ class AppView extends Component {
                     </div>
                 </div>
                 <div className="footer">
-                    <div className='footerWrapper' id='chart'></div>
+                    <HistoryChartView history={this.state.history}></HistoryChartView>
                 </div>
             </div>);
 

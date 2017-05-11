@@ -18,15 +18,14 @@ class ChallengingView extends Component {
         this.render = this.render.bind(this);
     }
 
-    componentDidMount() {
-        var self = this;
+    componentDidMount() {        
         this.interval = setInterval(() => {
-            if (self.props.challenge.state == 'RUNNING') {
-                self.props.challenge.checkIfChallengedTimedout();
-                this.props.progressChanged((100 * self.props.challenge.elapsedSeconds()) / self.props.challenge.maxTime);
-            } else if (self.props.challenge.state == 'ENDED') {
-                clearInterval(self.interval);
-                self.setState({ challenge: self.props.challenge });
+            if (this.props.challenge.state == 'RUNNING') {
+                this.props.challenge.checkIfChallengedTimedout();
+                this.props.progressChanged((100 * this.props.challenge.elapsedSeconds()) / this.props.challenge.maxTime);
+            } else if (this.props.challenge.state == 'ENDED') {
+                clearInterval(this.interval);
+                this.setState({ challenge: this.props.challenge });
                 this.props.progressChanged(100);
             }
         }, 10);
