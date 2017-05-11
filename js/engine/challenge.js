@@ -34,7 +34,7 @@ class Challenge {
 
     restart() {
         this.results = null;
-        this.start();
+        this.start(this.endOnTimeout);
     }
 
     setDefaults() {
@@ -42,7 +42,6 @@ class Challenge {
         this.startTime = null;
         this.runningMiliseconds = null;
         this.currentQuestion = null;
-        this.endOnTimeout = false;
     }
 
     checkIfChallengedCameToTheEnd() {
