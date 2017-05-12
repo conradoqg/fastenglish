@@ -7,8 +7,8 @@ class MainMenuView extends Component {
         this.state = {
             loading: false,
             selectedDificulty: 'EASY',
-            selectedQuestionsAmount: '5',
-            selectedMaxSeconds: '100000'
+            selectedQuestionsAmount: '30',
+            selectedMaxSeconds: '300000'
         };
         this.toggleDificultyChange = this.toggleDificultyChange.bind(this);
         this.toggleQuestionsAmountChange = this.toggleQuestionsAmountChange.bind(this);
@@ -87,13 +87,13 @@ class MainMenuView extends Component {
                 </label>
                 <label className='optionGroupTitle'>
                     <span className='title'>Questions Amount: </span>
-                    <input type="radio" id='questionsLow' name='questionsAmount' className='radioDefault' value="5" checked={(this.state.selectedQuestionsAmount == '5')} onChange={this.toggleQuestionsAmountChange} /><label id='labelQuestionsLow' htmlFor='questionsLow' tabIndex='3' onFocus={() => $('#questionsLow').prop('checked', true)} onKeyDown={(e) => { return this.handleKeyPress(e, 'labelQuestionsHight', 'labelQuestionsMiddle', 'labelDificultyEasy', 'labelTargetTimeLow'); }}> <span></span> 5 </label>
+                    <input type="radio" id='questionsLow' name='questionsAmount' className='radioDefault' value="30" checked={(this.state.selectedQuestionsAmount == '30')} onChange={this.toggleQuestionsAmountChange} /><label id='labelQuestionsLow' htmlFor='questionsLow' tabIndex='3' onFocus={() => $('#questionsLow').prop('checked', true)} onKeyDown={(e) => { return this.handleKeyPress(e, 'labelQuestionsHight', 'labelQuestionsMiddle', 'labelDificultyEasy', 'labelTargetTimeLow'); }}> <span></span> 30 </label>
                     <input type="radio" id='questionsMiddle' name='questionsAmount' className='radioDefault' value="60" checked={(this.state.selectedQuestionsAmount == '60')} onChange={this.toggleQuestionsAmountChange} /><label id='labelQuestionsMiddle' htmlFor='questionsMiddle' tabIndex='4' onFocus={() => $('#questionsMiddle').prop('checked', true)} onKeyDown={(e) => { return this.handleKeyPress(e, 'labelQuestionsLow', 'labelQuestionsHight', 'labelDificultyMedium', 'labelTargetTimeMiddle'); }}> <span></span> 60 </label>
                     <input type="radio" id='questionsHight' name='questionsAmount' className='radioDefault' value="90" checked={(this.state.selectedQuestionsAmount == '90')} onChange={this.toggleQuestionsAmountChange} /><label id='labelQuestionsHight' htmlFor='questionsHight' tabIndex='5' onFocus={() => $('#questionsHight').prop('checked', true)} onKeyDown={(e) => { return this.handleKeyPress(e, 'labelQuestionsMiddle', 'labelQuestionsLow', 'labelDificultyHard', 'labelTargetTimeHight'); }} > <span></span> 90 </label>
                 </label>
                 <label className='optionGroupTitle'>
                     <span className='title'>Target Time (minutes): </span>
-                    <input type="radio" id='targetTimeLow' name='targetTime' className='radioDefault' value="100000" checked={(this.state.selectedMaxSeconds == '100000')} onChange={this.toggleMaxSecondsChange} /><label id='labelTargetTimeLow' htmlFor='targetTimeLow' tabIndex='6' onFocus={() => $('#targetTimeLow').prop('checked', true)} onKeyDown={(e) => { return this.handleKeyPress(e, 'labelTargetTimeHight', 'labelTargetTimeMiddle', 'labelQuestionsLow', 'btnStart'); }}> <span></span> 10 </label>
+                    <input type="radio" id='targetTimeLow' name='targetTime' className='radioDefault' value="300000" checked={(this.state.selectedMaxSeconds == '300000')} onChange={this.toggleMaxSecondsChange} /><label id='labelTargetTimeLow' htmlFor='targetTimeLow' tabIndex='6' onFocus={() => $('#targetTimeLow').prop('checked', true)} onKeyDown={(e) => { return this.handleKeyPress(e, 'labelTargetTimeHight', 'labelTargetTimeMiddle', 'labelQuestionsLow', 'btnStart'); }}> <span></span> 5 </label>
                     <input type="radio" id='targetTimeMiddle' name='targetTime' className='radioDefault' value="600000" checked={(this.state.selectedMaxSeconds == '600000')} onChange={this.toggleMaxSecondsChange} /><label id='labelTargetTimeMiddle' htmlFor='targetTimeMiddle' tabIndex='7' onFocus={() => $('#targetTimeMiddle').prop('checked', true)} onKeyDown={(e) => { return this.handleKeyPress(e, 'labelTargetTimeLow', 'labelTargetTimeHight', 'labelQuestionsMiddle', 'btnStart'); }}> <span></span> 10 </label>
                     <input type="radio" id='targetTimeHight' name='targetTime' className='radioDefault' value="900000" checked={(this.state.selectedMaxSeconds == '900000')} onChange={this.toggleMaxSecondsChange} /><label id='labelTargetTimeHight' htmlFor='targetTimeHight' tabIndex='8' onFocus={() => $('#targetTimeHight').prop('checked', true)} onKeyDown={(e) => { return this.handleKeyPress(e, 'labelTargetTimeMiddle', 'labelTargetTimeLow', 'labelQuestionsHight', 'btnStart'); }}> <span></span> 15 </label>
                 </label>

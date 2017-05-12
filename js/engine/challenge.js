@@ -1,4 +1,4 @@
-const { calculatePoints, getCorrectorByType } = require('./util');
+const CorrectorFactory = require('./correctorFactory');
 const uuid = require('uuid');
 
 class Challenge {
@@ -88,7 +88,7 @@ class Challenge {
     anwserQuestion(response) {
         if (this.checkIfChallengedTimedout()) return;
 
-        var corrector = getCorrectorByType(this.qaPair[this.currentQuestion].type);
+        var corrector = CorrectorFactory.getCorrectorByType(this.qaPair[this.currentQuestion].type);
         var correction = corrector.isCorrect(this.qaPair[this.currentQuestion].answers, response);
         if (correction.isCorrect) this.correctAnwsers++;
 
@@ -111,7 +111,22 @@ class Challenge {
             correctAnwsers: this.correctAnwsers,
             points: 0
         };
-        result[id].points = calculatePoints(result[id]);
+        result[id].points = Challenge.calculatePoints(result[id]);
+        return result;
+    }
+
+    static calculatePoints(challengeResult) {
+        var result = 0;        
+        if (!challengeResult.version || challengeResult.version == '1') {
+            var percentDone = ((challengeResult.milisecondsDone * 100) / challengeResult.milisecondsMax) / 100;
+            var correctQuestionsPercent = (challengeResult.correctAnwsers * 100) / challengeResult.totalQuestions;
+            var levelMultiplier = (challengeResult.level == 'EASY' ? 1 : (challengeResult.level == 'MEDIUM' ? 1.3 : 1.7));
+            var curvedPercentMultiplier = (1 + Math.pow(1 - percentDone, 2));
+            result = (curvedPercentMultiplier * levelMultiplier * correctQuestionsPercent);
+            if (isNaN(result)) result = 0;
+        } else {
+            result = 0;
+        }
         return result;
     }
 }

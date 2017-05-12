@@ -1,7 +1,8 @@
 const sinon = require('sinon');
 const App = require('../js/engine/app');
 const GameEngine = require('../js/engine/gameEngine');
-const { calculatePoints, challengeCreator } = require('../js/engine/util');
+const Challenge = require('../js/engine/challenge');
+const challengeCreator = require('../js/engine/challengeCreator');
 
 require('should');
 
@@ -165,7 +166,7 @@ describe('Engine Test', function () {
                 correctAnwsers: 90
             };
 
-            calculatePoints(testResult).should.be.equal(181);
+            Challenge.calculatePoints(testResult).should.be.equal(181);
         });
         it('calculatePoints should correct calculate (MEDIUM)', function () {
             var testResult = {
@@ -178,7 +179,7 @@ describe('Engine Test', function () {
                 correctAnwsers: 90
             };
 
-            calculatePoints(testResult).should.be.equal(235.3);
+            Challenge.calculatePoints(testResult).should.be.equal(235.3);
         });
         it('calculatePoints should correct calculate (HARD)', function () {
             var testResult = {
@@ -191,7 +192,7 @@ describe('Engine Test', function () {
                 correctAnwsers: 90
             };
 
-            calculatePoints(testResult).should.be.equal(307.7);
+            Challenge.calculatePoints(testResult).should.be.equal(307.7);
         });
     });
 });

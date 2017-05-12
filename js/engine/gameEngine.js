@@ -1,4 +1,4 @@
-const { challengeCreator } = require('./util');
+const challengeCreator = require('./challengeCreator');
 
 class GameEngine {
     constructor(gameState, historyStorage) {
