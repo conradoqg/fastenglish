@@ -2,13 +2,15 @@ const CorrectorFactory = require('./correctorFactory');
 const uuid = require('uuid');
 
 class Challenge {
-    constructor(level, qaPair, maxTime, historyStorage) {
+    constructor(level, qaPair, maxTime) {
         this.state = 'CREATED';
         this.level = level;
         this.qaPair = qaPair;
-        this.maxTime = maxTime;
-        this.historyStorage = historyStorage;
-        this.setDefaults();
+        this.maxTime = maxTime;        
+        this.correctAnwsers = 0;
+        this.startTime = null;
+        this.runningMiliseconds = null;
+        this.currentQuestion = null;        
     }
 
     start(endOnTimeout) {
@@ -25,23 +27,18 @@ class Challenge {
     stop() {
         if (this.state == 'CREATED' || this.state == 'RUNNING') {
             this.stopTimer();
-            this.results = this.calculateResults();
-            this.historyStorage.add(this.results);
-            this.state = 'ENDED';
-            this.setDefaults();
+            this.results = this.calculateResults();            
+            this.state = 'ENDED';            
         }
     }
 
     restart() {
-        this.results = null;
-        this.start(this.endOnTimeout);
-    }
-
-    setDefaults() {
         this.correctAnwsers = 0;
         this.startTime = null;
         this.runningMiliseconds = null;
-        this.currentQuestion = null;
+        this.currentQuestion = null;      
+        this.results = null;
+        this.start(this.endOnTimeout);
     }
 
     checkIfChallengedCameToTheEnd() {

@@ -71,7 +71,7 @@ describe('Engine Test', function () {
 
     describe('Challenge', function () {
         it('should answer one question', function (done) {
-            challengeCreator('EASY', 2, 10000, new HistoryStorage(), fetcherMock).then(function (challenge) {
+            challengeCreator('EASY', 2, 10000, fetcherMock).then(function (challenge) {
                 challenge.start();
                 challenge.anwserQuestion('yes');
                 challenge.stop();
@@ -82,7 +82,7 @@ describe('Engine Test', function () {
         });
 
         it('should answer two question', function (done) {
-            challengeCreator('EASY', 2, 10000, new HistoryStorage(), fetcherMock).then(function (challenge) {
+            challengeCreator('EASY', 2, 10000, fetcherMock).then(function (challenge) {
                 challenge.start();
                 challenge.anwserQuestion('yes');
                 challenge.nextQuestion();
@@ -94,7 +94,7 @@ describe('Engine Test', function () {
         });
 
         it('should answer question in enough time (stopping with last question)', function (done) {
-            challengeCreator('EASY', 2, 100000, new HistoryStorage(), fetcherMock).then(function (challenge) {
+            challengeCreator('EASY', 2, 100000, fetcherMock).then(function (challenge) {
                 challenge.start(true);
                 challenge.anwserQuestion('yes');
                 challenge.nextQuestion();
@@ -107,7 +107,7 @@ describe('Engine Test', function () {
         });
 
         it('should answer question in enough time (stopping with stopTimer)', function (done) {
-            challengeCreator('EASY', 2, 1000, new HistoryStorage(), fetcherMock).then(function (challenge) {
+            challengeCreator('EASY', 2, 1000, fetcherMock).then(function (challenge) {
                 challenge.start(true);
                 challenge.anwserQuestion('yes');
                 challenge.stop();
@@ -119,7 +119,7 @@ describe('Engine Test', function () {
         });
 
         it('should answer question in enough time (stopping with nextQuestion)', function (done) {
-            challengeCreator('EASY', 2, 1000, new HistoryStorage(), fetcherMock).then(function (challenge) {
+            challengeCreator('EASY', 2, 1000, fetcherMock).then(function (challenge) {
                 challenge.start(true);
                 challenge.anwserQuestion('yes');
                 challenge.nextQuestion();
@@ -132,7 +132,7 @@ describe('Engine Test', function () {
         });
 
         it('should not answer question in enough time', function (done) {
-            challengeCreator('EASY', 2, 50, new HistoryStorage(), fetcherMock).then(function (challenge) {
+            challengeCreator('EASY', 2, 50, fetcherMock).then(function (challenge) {
                 challenge.start(true);
                 setTimeout(function () {
                     try {
