@@ -1,16 +1,18 @@
 const CorrectorFactory = require('./correctorFactory');
 const uuid = require('uuid');
+const EventEmitter = require('events').EventEmitter;
 
 class Challenge {
     constructor(level, qaPair, maxTime) {
         this.state = 'CREATED';
         this.level = level;
         this.qaPair = qaPair;
-        this.maxTime = maxTime;        
+        this.maxTime = maxTime;
         this.correctAnwsers = 0;
         this.startTime = null;
         this.runningMiliseconds = null;
-        this.currentQuestion = null;        
+        this.currentQuestion = null;
+        this.emitter = new EventEmitter();
     }
 
     start(endOnTimeout) {
@@ -19,24 +21,29 @@ class Challenge {
         if (this.state == 'CREATED' || this.state == 'ENDED') {
             this.startTimer();
             this.results = null;
-            this.state = 'RUNNING';
             this.nextQuestion();
+            this.setState('RUNNING');
         }
     }
 
     stop() {
         if (this.state == 'CREATED' || this.state == 'RUNNING') {
             this.stopTimer();
-            this.results = this.calculateResults();            
-            this.state = 'ENDED';            
+            this.results = this.calculateResults();
+            this.setState('ENDED');
         }
+    }
+
+    setState(newState) {
+        this.state = newState;
+        this.emitter.emit('state', newState);
     }
 
     restart() {
         this.correctAnwsers = 0;
         this.startTime = null;
         this.runningMiliseconds = null;
-        this.currentQuestion = null;      
+        this.currentQuestion = null;
         this.results = null;
         this.start(this.endOnTimeout);
     }
@@ -113,7 +120,7 @@ class Challenge {
     }
 
     static calculatePoints(challengeResult) {
-        var result = 0;        
+        var result = 0;
         if (!challengeResult.version || challengeResult.version == '1') {
             var percentDone = ((challengeResult.milisecondsDone * 100) / challengeResult.milisecondsMax) / 100;
             var correctQuestionsPercent = (challengeResult.correctAnwsers * 100) / challengeResult.totalQuestions;

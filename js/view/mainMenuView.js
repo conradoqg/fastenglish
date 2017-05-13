@@ -37,17 +37,11 @@ class MainMenuView extends Component {
         });
     }
 
-    startChallengeHandler() {
-        var self = this;
+    startChallengeHandler() {        
         this.setState({
             loading: true
         });
-        this.props.engine.start(this.state.selectedDificulty, this.state.selectedQuestionsAmount, this.state.selectedMaxSeconds, true).then(function () {
-            self.setState({
-                loading: false
-            });
-            self.props.gameStarted();
-        });
+        this.props.engine.start(this.state.selectedDificulty, this.state.selectedQuestionsAmount, this.state.selectedMaxSeconds, true);
     }
 
     optionsHandler() {

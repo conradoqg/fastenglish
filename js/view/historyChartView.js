@@ -16,6 +16,7 @@ class HistoryChartView extends Component {
     }
 
     shouldComponentUpdate(nextProps) {
+        console.log(`redrawing history ${nextProps.history !== this.props.history}`);
         return nextProps.history !== this.props.history;
     }
 

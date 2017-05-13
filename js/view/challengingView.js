@@ -18,7 +18,7 @@ class ChallengingView extends Component {
         this.render = this.render.bind(this);
     }
 
-    componentDidMount() {        
+    componentDidMount() {
         this.interval = setInterval(() => {
             if (this.props.challenge.state == 'RUNNING') {
                 this.props.challenge.checkIfChallengedTimedout();
@@ -71,19 +71,23 @@ class ChallengingView extends Component {
         });
     }
 
-    render() {
-        var result = null;
+    renderLastQuestionResult() {
+        let lastQuestionResult = null;
         if (this.state.lastQuestionResult.isCorrect != null && this.state.lastQuestionResult.isCorrect == false) {
-            result = (
+            lastQuestionResult = (
                 <span className='message fail'><b>Correct response: </b>{this.state.lastQuestionResult.correctAnwsers}</span>
             );
         } else if (this.state.lastQuestionResult.isCorrect != null && this.state.lastQuestionResult.isCorrect && this.state.lastQuestionResult.alternative.length > 0) {
-            result = (
+            lastQuestionResult = (
                 <span className='message info'><b>Alternative: </b>{this.state.lastQuestionResult.alternative}</span>
             );
         }
+        return lastQuestionResult;
+    }
 
-        var toRender = null;
+    render() {
+        let lastQuestionResult = this.renderLastQuestionResult();
+        let toRender = null;
 
         if (this.props.challenge.state == 'CREATED' || this.props.challenge.state == 'RUNNING') {
             toRender = (
@@ -96,7 +100,7 @@ class ChallengingView extends Component {
                         <input type='button' className="btnDefault" onClick={this.respondHandle} value='Next!' />
                     </div>
                     <div className='middle-bottom'>
-                        {result}
+                        {lastQuestionResult}
                     </div>
                 </div>
             );
@@ -105,7 +109,7 @@ class ChallengingView extends Component {
                 <div className='middle'>
                     <h2>Challenge Ended!</h2>
                     <div className='middle-bottom'>
-                        {result}
+                        {lastQuestionResult}
                     </div>
                     <input type='button' className="btnDefault" onClick={this.props.challengeEnded} autoFocus value='Check Results' />
                 </div>

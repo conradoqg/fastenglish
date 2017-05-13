@@ -1,5 +1,5 @@
-const HistoryStorage = require('./historyStorage');
-const GameEngine = require('./gameEngine');
+let HistoryStorage = require('./historyStorage');
+let GameEngine = require('./gameEngine');
 
 const initialGameState = {
     state: 'MENU',

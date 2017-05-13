@@ -4,50 +4,55 @@ const MenuView = require('./menuView');
 const ChallengeView = require('./challengeView');
 const ProgressView = require('./progressView');
 const HistoryChartView = require('./historyChartView');
-const HistoryStorage = require('../engine/historyStorage');
 
 class AppView extends Component {
     constructor(props) {
         super(props);
-        this.historyStorage = new HistoryStorage();
-        this.gameStarted = this.gameStarted.bind(this);
-        this.gameEnded = this.gameEnded.bind(this);
         this.progressChanged = this.progressChanged.bind(this);
-        this.historyChanged = this.historyChanged.bind(this);
+        this.updateGameState = this.updateGameState.bind(this);
+        this.updateHistoryStorageState = this.updateHistoryStorageState.bind(this);
         this.render = this.render.bind(this);
         this.state = {
-            app: props.app,
-            progress: null,
-            history: this.historyStorage.load()
+            gameEngine: props.app.gameEngine,
+            historyStorage: props.app.historyStorage,
+            progress: null
         };
     }
 
-    gameStarted() {
-        this.forceUpdate();
+    componentWillMount() {
+        this.state.gameEngine.emitter.on('state', this.updateGameState);
+        this.state.historyStorage.emitter.on('historyChanged', this.updateHistoryStorageState);
     }
 
-    gameEnded() {
-        this.forceUpdate();
+    componentWillUnmount() {
+        this.state.gameEngine.emitter.removeListener('state', this.updateGameState);
+        this.state.historyStorage.emitter.removeListener('historyChanged', this.updateHistoryStorageState);
+    }
+
+    updateGameState(state) {
+        console.log(`game state changed to ${state}`);
+        this.setState({ gameEngine: this.state.gameEngine });
+    }
+
+    updateHistoryStorageState() {
+        console.log('history storage changed.');
+        this.setState({ historyStorage: this.state.historyStorage });
     }
 
     progressChanged(progress) {
         this.setState({ progress });
     }
 
-    historyChanged() {
-        this.setState({ history: this.historyStorage.load() });
-    }
-
     render() {
         var renderToContent = null;
 
-        switch (this.state.app.gameEngine.gameState.state) {
+        switch (this.state.gameEngine.gameState.state) {
             case 'MENU':
-                renderToContent = (<MenuView engine={this.state.app.gameEngine} gameStarted={this.gameStarted} />);
+                renderToContent = (<MenuView engine={this.state.gameEngine} />);
                 break;
             case 'CHALLENGING':
             default:
-                renderToContent = (<ChallengeView engine={this.state.app.gameEngine} challenge={this.state.app.gameEngine.gameState.runningChallenge} gameEnded={this.gameEnded} progressChanged={this.progressChanged} historyChanged={this.historyChanged} />);
+                renderToContent = (<ChallengeView engine={this.state.gameEngine} challenge={this.state.gameEngine.gameState.runningChallenge} progressChanged={this.progressChanged} />);
                 break;
         }
 
@@ -70,7 +75,7 @@ class AppView extends Component {
                     </div>
                 </div>
                 <div className="footer">
-                    <HistoryChartView history={this.state.history}></HistoryChartView>
+                    <HistoryChartView history={this.state.historyStorage.history}></HistoryChartView>
                 </div>
             </div>);
 

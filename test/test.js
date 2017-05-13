@@ -1,5 +1,6 @@
 const sinon = require('sinon');
-const App = require('../js/engine/app');
+const rewire = require('rewire');
+const App = rewire('../js/engine/app');
 const GameEngine = require('../js/engine/gameEngine');
 const Challenge = require('../js/engine/challenge');
 const challengeCreator = require('../js/engine/challengeCreator');
@@ -31,9 +32,13 @@ const initialGameState = {
     runningChallenge: null
 };
 
-var HistoryStorage = function () { };
+var HistoryStorage = function () { 
+    console.log('asd');
+};
 HistoryStorage.prototype.load = sinon.stub().returns({});
 HistoryStorage.prototype.add = sinon.stub().returns();
+
+App.__set__('HistoryStorage', HistoryStorage);
 
 describe('Engine Test', function () {
     describe('App', function () {

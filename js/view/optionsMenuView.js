@@ -4,13 +4,14 @@ const React = require('react');
 class OptionsMenuView extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            message: null
-        };
         this.clearHistoryHandler = this.clearHistoryHandler.bind(this);
         this.backHandler = this.backHandler.bind(this);
         this.adminHandler = this.adminHandler.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
+        this.state = {
+            message: null
+        };
+        this.messageTimeout = null;
     }
 
     clearHistoryHandler() {
@@ -48,19 +49,22 @@ class OptionsMenuView extends Component {
         }
     }
 
+    componentWillUnmount() {
+        clearTimeout(this.messageTimeout);
+    }
+
     render() {
         let messageToRender = null;
         if (this.state.message) {
-            let self = this;
             messageToRender = (<p><span id='message' className='message success'>{this.state.message}</span></p>);
-            setTimeout(function () {
-                self.setState({
+            this.messageTimeout = setTimeout(() => {
+                this.setState({
                     message: null
                 });
             }, 6000);
         }
 
-        return (<div className='middle'>            
+        return (<div className='middle'>
             <input type='button' id='btnClearHistory' className="btnDefault" autoFocus value='Clear history' onClick={this.clearHistoryHandler} onKeyDown={(e) => { return this.handleKeyPress(e, null, null, 'btnBack', 'btnAdmin'); }} /><br />
             <input type='button' id='btnAdmin' className="btnDefault" value='Admin' onClick={this.adminHandler} onKeyDown={(e) => { return this.handleKeyPress(e, null, null, 'btnClearHistory', 'btnBack'); }} /><br />
             <input type='button' id='btnBack' className="btnDefault" value='Back' onClick={this.backHandler} onKeyDown={(e) => { return this.handleKeyPress(e, null, null, 'btnAdmin', 'btnClearHistory'); }} /><br />

@@ -1,15 +1,31 @@
+const EventEmitter = require('events').EventEmitter;
+
 class HistoryStorage {
+    constructor() {
+        this.history = null;   
+        this.emitter = new EventEmitter();     
+        this.load();
+    }
+
     load() {
-        var challengesHistory = store.get('challengesHistory') || {};
-        return challengesHistory;
+        this.history = store.get('challengesHistory') || {};        
+        this.emitter.emit('historyChanged');
+    }
+
+    save() {
+        store.set('challengesHistory', this.history);
+        this.emitter.emit('historyChanged');
     }
 
     add(history) {
-        store.set('challengesHistory', Object.assign(this.load(), history));
+        this.history = Object.assign(history, this.history);
+        this.save();        
     }
 
-    clear() {
-        store.set('challengesHistory', {});
+    clear() {        
+        this.history = {};
+        this.save();
+        
     }
 }
 

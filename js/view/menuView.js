@@ -29,7 +29,7 @@ class MenuView extends Component {
                 break;
             case 'MAIN':
             default:
-                menuToRender = (<MainMenuView engine={this.props.engine} gameStarted={this.props.gameStarted} changeMenuTo={this.changeMenuTo} />);
+                menuToRender = (<MainMenuView engine={this.props.engine} changeMenuTo={this.changeMenuTo} />);
                 break;
         }
 
