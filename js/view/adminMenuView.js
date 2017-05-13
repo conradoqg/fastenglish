@@ -1,5 +1,5 @@
-const { Component } = require('react');
-const React = require('react');
+let { Component } = require('react');
+let React = require('react');
 
 class AdminMenuView extends Component {
     constructor(props) {
@@ -38,14 +38,13 @@ class AdminMenuView extends Component {
     }
 
     onClearDataHandler() {
-        var self = this;
-        this.clearDatabase().then(function () {
-            self.setState({
+        this.clearDatabase().then(() => {
+            this.setState({
                 messageType: '1',
                 message: 'Questions table removed successfully!'
             });
-        }).catch(function (error) {
-            self.setState({
+        }).catch((error) => {
+            this.setState({
                 messageType: '2',
                 message: 'Error while removing questions: ' + error.message
             });
@@ -53,9 +52,8 @@ class AdminMenuView extends Component {
     }
 
     onInsertTestDataHandler() {
-        var self = this;
-        this.clearDatabase().then(function () {
-            var ref = firebase.database().ref('questions');
+        this.clearDatabase().then(() => {
+            let ref = firebase.database().ref('questions');
             return new Promise(function (fulfill, reject) {
                 $.ajax({
                     url: 'data/questions.json',
@@ -72,13 +70,13 @@ class AdminMenuView extends Component {
                     return ref.push().set(record);
                 }));
             });
-        }).then(function () {
-            self.setState({
+        }).then(() => {
+            this.setState({
                 messageType: '1',
                 message: 'Questions table records added successfully!'
             });
-        }).catch(function (error) {
-            self.setState({
+        }).catch((error) => {
+            this.setState({
                 messageType: '2',
                 message: 'Error while adding questions: ' + error.message
             });
@@ -93,10 +91,9 @@ class AdminMenuView extends Component {
         this.setState({ password: event.target.value });
     }
 
-    login(username, password) {
-        var self = this;
-        firebase.auth().signInWithEmailAndPassword(username, password).then(function (result) {
-            self.setState({
+    login(username, password) {        
+        firebase.auth().signInWithEmailAndPassword(username, password).then((result) => {
+            this.setState({
                 username: '',
                 password: '',
                 logged: true,
@@ -105,8 +102,8 @@ class AdminMenuView extends Component {
                 message: 'Authenticated successfully!'
             });
             $('#btnLogin').focus();
-        }).catch(function (error) {
-            self.setState({
+        }).catch((error) => {
+            this.setState({
                 logged: false,
                 messageType: '2',
                 message: 'Authentication Failed!\n' + error.message
@@ -114,10 +111,9 @@ class AdminMenuView extends Component {
         });
     }
 
-    logout() {
-        var self = this;
-        firebase.auth().signOut().then(function () {
-            self.setState({
+    logout() {        
+        firebase.auth().signOut().then(() => {
+            this.setState({
                 logged: false,
                 messageType: '1',
                 message: 'Logged out successfully!'
@@ -156,9 +152,8 @@ class AdminMenuView extends Component {
     }
 
     render() {
-        var content = null;
-        var message = null;
-        var self = this;
+        let content = null;
+        let message = null;        
 
         if (this.state.isLogging) {
             content = (
@@ -171,7 +166,7 @@ class AdminMenuView extends Component {
         }
 
         if (this.state.messageType) {
-            var className = 'message';
+            let className = 'message';
 
             if (this.state.messageType == '1') className += ' success';
             else if (this.state.messageType == '2') className += ' fail';
@@ -180,8 +175,8 @@ class AdminMenuView extends Component {
             message = (<p><span id='message' className={className}>{this.state.message}</span></p>);
 
             if (this.state.messageType == '1' || this.state.messageType == '2') {
-                setTimeout(function () {
-                    self.setState({
+                setTimeout(() => {
+                    this.setState({
                         messageType: null,
                         message: ''
                     });

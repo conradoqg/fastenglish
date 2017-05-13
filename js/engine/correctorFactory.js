@@ -1,4 +1,4 @@
-const SimpleCorrector = require('./simpleCorrector');
+let SimpleCorrector = require('./simpleCorrector');
 
 class CorrectorFactory {
     static getCorrectorByType(type) {

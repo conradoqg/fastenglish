@@ -1,9 +1,9 @@
-const { Component } = require('react');
-const React = require('react');
-const MenuView = require('./menuView');
-const ChallengeView = require('./challengeView');
-const ProgressView = require('./progressView');
-const HistoryChartView = require('./historyChartView');
+let { Component } = require('react');
+let React = require('react');
+let MenuView = require('./menuView');
+let ChallengeView = require('./challengeView');
+let ProgressView = require('./progressView');
+let HistoryChartView = require('./historyChartView');
 
 class AppView extends Component {
     constructor(props) {
@@ -29,13 +29,11 @@ class AppView extends Component {
         this.state.historyStorage.emitter.removeListener('historyChanged', this.updateHistoryStorageState);
     }
 
-    updateGameState(state) {
-        console.log(`game state changed to ${state}`);
+    updateGameState(state) {        
         this.setState({ gameEngine: this.state.gameEngine });
     }
 
-    updateHistoryStorageState() {
-        console.log('history storage changed.');
+    updateHistoryStorageState() {        
         this.setState({ historyStorage: this.state.historyStorage });
     }
 
@@ -44,7 +42,7 @@ class AppView extends Component {
     }
 
     render() {
-        var renderToContent = null;
+        let renderToContent = null;
 
         switch (this.state.gameEngine.gameState.state) {
             case 'MENU':
@@ -56,7 +54,7 @@ class AppView extends Component {
                 break;
         }
 
-        var toRender = (
+        let toRender = (
             <div className='wrapper'>
                 <div className="header">
                     <ProgressView progress={this.state.progress}></ProgressView>

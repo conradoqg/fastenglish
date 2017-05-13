@@ -1,6 +1,6 @@
-const CorrectorFactory = require('./correctorFactory');
-const uuid = require('uuid');
-const EventEmitter = require('events').EventEmitter;
+let CorrectorFactory = require('./correctorFactory');
+let uuid = require('uuid');
+let EventEmitter = require('events').EventEmitter;
 
 class Challenge {
     constructor(level, qaPair, maxTime) {
@@ -93,8 +93,8 @@ class Challenge {
     anwserQuestion(response) {
         if (this.checkIfChallengedTimedout()) return;
 
-        var corrector = CorrectorFactory.getCorrectorByType(this.qaPair[this.currentQuestion].type);
-        var correction = corrector.isCorrect(this.qaPair[this.currentQuestion].answers, response);
+        let corrector = CorrectorFactory.getCorrectorByType(this.qaPair[this.currentQuestion].type);
+        let correction = corrector.isCorrect(this.qaPair[this.currentQuestion].answers, response);
         if (correction.isCorrect) this.correctAnwsers++;
 
         this.checkIfChallengedCameToTheEnd();
@@ -104,8 +104,8 @@ class Challenge {
     }
 
     calculateResults() {
-        var result = {};
-        var id = uuid.v1();
+        let result = {};
+        let id = uuid.v1();
         result[id] = {
             version: 1,
             date: Date.now(),
@@ -121,12 +121,12 @@ class Challenge {
     }
 
     static calculatePoints(challengeResult) {
-        var result = 0;
+        let result = 0;
         if (!challengeResult.version || challengeResult.version == '1') {
-            var percentDone = ((challengeResult.milisecondsDone * 100) / challengeResult.milisecondsMax) / 100;
-            var correctQuestionsPercent = (challengeResult.correctAnwsers * 100) / challengeResult.totalQuestions;
-            var levelMultiplier = (challengeResult.level == 'EASY' ? 1 : (challengeResult.level == 'MEDIUM' ? 1.3 : 1.7));
-            var curvedPercentMultiplier = (1 + Math.pow(1 - percentDone, 2));
+            let percentDone = ((challengeResult.milisecondsDone * 100) / challengeResult.milisecondsMax) / 100;
+            let correctQuestionsPercent = (challengeResult.correctAnwsers * 100) / challengeResult.totalQuestions;
+            let levelMultiplier = (challengeResult.level == 'EASY' ? 1 : (challengeResult.level == 'MEDIUM' ? 1.3 : 1.7));
+            let curvedPercentMultiplier = (1 + Math.pow(1 - percentDone, 2));
             result = (curvedPercentMultiplier * levelMultiplier * correctQuestionsPercent);
             if (isNaN(result)) result = 0;
         } else {

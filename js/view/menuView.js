@@ -1,8 +1,8 @@
-const { Component } = require('react');
-const React = require('react');
-const MainMenuView = require('./mainMenuView');
-const OptionsMenuView = require('./optionsMenuView');
-const AdminMenuView = require('./adminMenuView');
+let { Component } = require('react');
+let React = require('react');
+let MainMenuView = require('./mainMenuView');
+let OptionsMenuView = require('./optionsMenuView');
+let AdminMenuView = require('./adminMenuView');
 
 class MenuView extends Component {
     constructor(props) {

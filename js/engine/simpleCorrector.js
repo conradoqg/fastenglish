@@ -1,6 +1,6 @@
 class SimpleCorrector {
     isCorrect(answers, response) {
-        var correction = {
+        let correction = {
             isCorrect: false,
             correctAnwsers: answers.join(' or '),
             alternative: ''

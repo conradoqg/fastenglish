@@ -32,9 +32,7 @@ const initialGameState = {
     runningChallenge: null
 };
 
-var HistoryStorage = function () { 
-    console.log('asd');
-};
+var HistoryStorage = function () {};
 HistoryStorage.prototype.load = sinon.stub().returns({});
 HistoryStorage.prototype.add = sinon.stub().returns();
 

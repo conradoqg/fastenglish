@@ -1,6 +1,6 @@
-const { Component } = require('react');
-const React = require('react');
-const Theming = require('../util/theming');
+let { Component } = require('react');
+let React = require('react');
+let Theming = require('../util/theming');
 
 class HistoryChartView extends Component {
     constructor(props) {
@@ -15,8 +15,7 @@ class HistoryChartView extends Component {
         drawChart(this.props.history);
     }
 
-    shouldComponentUpdate(nextProps) {
-        console.log(`redrawing history ${nextProps.history !== this.props.history}`);
+    shouldComponentUpdate(nextProps) {        
         return nextProps.history !== this.props.history;
     }
 
@@ -26,7 +25,7 @@ class HistoryChartView extends Component {
 }
 
 function average(array) {
-    var sum = 0, j = 0;
+    let sum = 0, j = 0;
     for (var i = 0; i < array.length, isFinite(array[i]); i++) {
         sum += parseFloat(array[i]); ++j;
     }
@@ -34,14 +33,14 @@ function average(array) {
 }
 
 function createChart(historyData) {
-    var windowResizeTimer = null;
+    let windowResizeTimer = null;
 
     google.charts.load('current', {
         'packages': ['corechart']
     });
     google.charts.setOnLoadCallback(() => drawChart(historyData));
 
-    var setTimer = function () {
+    let setTimer = function () {
         clearTimeout(windowResizeTimer);
         windowResizeTimer = setTimeout(() => drawChart(historyData), 100);
     };
@@ -50,10 +49,10 @@ function createChart(historyData) {
 }
 
 function drawChart(historyData) {
-    var options = null;
-    var chart = null;
-    var data = null;
-    var rawData = null;    
+    let options = null;
+    let chart = null;
+    let data = null;
+    let rawData = null;    
 
     rawData = historyData;
 
@@ -80,12 +79,12 @@ function drawChart(historyData) {
         p: { html: true }
     });
 
-    var calculatedData = {};
+    let calculatedData = {};
 
     for (var index in rawData) {
-        var rawRecord = rawData[index];
+        let rawRecord = rawData[index];
         if (!rawRecord.version || rawRecord.version == '1') {
-            var formatedDate = moment(parseInt(rawRecord.date)).format('L');
+            let formatedDate = moment(parseInt(rawRecord.date)).format('L');
 
             if (!calculatedData[formatedDate]) {
                 calculatedData[formatedDate] = {};
@@ -113,7 +112,7 @@ function drawChart(historyData) {
     ]);
 
     for (index in calculatedData) {
-        var calculatedRecord = calculatedData[index];
+        let calculatedRecord = calculatedData[index];
         data.addRow([
             index,
             calculatedRecord['EASY'].average,
@@ -169,7 +168,7 @@ function drawChart(historyData) {
         }
     };
 
-    var chartElement = $('#chart')[0];
+    let chartElement = $('#chart')[0];
 
     chart = new google.visualization.AreaChart(chartElement);
     chartElement.innerHTML = '';

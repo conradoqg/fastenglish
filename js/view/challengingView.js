@@ -1,6 +1,6 @@
-const { Component } = require('react');
-const Theming = require('../util/theming');
-const React = require('react');
+let { Component } = require('react');
+let Theming = require('../util/theming');
+let React = require('react');
 
 class ChallengingView extends Component {
     constructor(props) {
@@ -43,8 +43,7 @@ class ChallengingView extends Component {
         this.state.challenge.emitter.removeListener('newQuestion', this.updateChallengeState);
     }
 
-    updateChallengeState() {
-        console.log('challenge changed.');
+    updateChallengeState() {        
         this.setState({ challenge: this.state.challenge });
     }
 
@@ -61,7 +60,7 @@ class ChallengingView extends Component {
     }
 
     respondHandle() {
-        var result = this.props.challenge.anwserQuestion(this.state.anwser);
+        let result = this.props.challenge.anwserQuestion(this.state.anwser);
 
         if (result != null) {
             this.props.challenge.nextQuestion();
@@ -97,28 +96,28 @@ class ChallengingView extends Component {
         return lastQuestionResult;
     }
 
+    renderQuestion() {
+        return (<div>
+            <h2>{this.state.challenge.qaPair[this.state.challenge.currentQuestion].question}</h2>
+            <label>Anwser:
+              <input type='text' autoFocus id='anwserButton' className='textboxDefault' value={this.state.anwser} onChange={this.anwserHandle} onKeyPress={this.handleKeyPress} placeholder='Your anwser' />
+            </label>
+            <input type='button' className="btnDefault" onClick={this.respondHandle} value='Next!' />
+        </div>);
+    }
+
     render() {
         let lastQuestionResult = this.renderLastQuestionResult();
-        let toRender = null;
+        let question = this.renderQuestion();        
 
-        toRender = (
+        return (
             <div>
                 <div className='middle'>
-                    <h2>{this.state.challenge.qaPair[this.state.challenge.currentQuestion].question}</h2>
-                    <label>Anwser:
-              <input type='text' autoFocus id='anwserButton' className='textboxDefault' value={this.state.anwser} onChange={this.anwserHandle} onKeyPress={this.handleKeyPress} placeholder='Your anwser' />
-                    </label>
-                    <input type='button' className="btnDefault" onClick={this.respondHandle} value='Next!' />
+                    {question}
                 </div>
                 <div className='middle-bottom'>
                     {lastQuestionResult}
                 </div>
-            </div>
-        );
-
-        return (
-            <div>
-                {toRender}
             </div>
         );
     }

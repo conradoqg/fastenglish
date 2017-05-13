@@ -1,5 +1,5 @@
-const challengeCreator = require('./challengeCreator');
-const EventEmitter = require('events').EventEmitter;
+let challengeCreator = require('./challengeCreator');
+let EventEmitter = require('events').EventEmitter;
 
 class GameEngine {
     constructor(gameState, historyStorage) {

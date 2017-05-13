@@ -1,10 +1,10 @@
 function getColors(prefix) {
-    var styleSheets = window.document.styleSheets;
-    var styleSheetsLength = styleSheets.length;
-    var colors = [];
+    let styleSheets = window.document.styleSheets;
+    let styleSheetsLength = styleSheets.length;
+    let colors = [];
 
     for (var i = 0; i < styleSheetsLength; i++) {
-        var classes = null;
+        let classes = null;
         try {
             // In Chrome, if stylesheet originates from a different domain,
             // ss.cssRules simply won't exist. I believe the same is true for IE, but
@@ -24,7 +24,7 @@ function getColors(prefix) {
 
         if (!classes)
             continue;
-        var classesLength = classes.length;
+        let classesLength = classes.length;
         for (var x = 0; x < classesLength; x++) {
             if (classes[x].selectorText && classes[x].selectorText.startsWith(prefix)) {
                 if (classes[x].style && classes[x].style.color) {

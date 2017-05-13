@@ -1,13 +1,13 @@
 require('../styles.less');
-const App = require('./engine/app');
-const React = require('react');
-const ReactDOM = require('react-dom');
-const AppView = require('./view/appView');
-const Theming = require('./util/theming');
+let App = require('./engine/app');
+let React = require('react');
+let ReactDOM = require('react-dom');
+let AppView = require('./view/appView');
+let Theming = require('./util/theming');
 
 $(document).ready(function () {    
     Theming.load('.colors');    
-    const app = new App();
+    let app = new App();
     app.start();
     ReactDOM.render(<AppView app={app} />, document.getElementById('app'));
 });

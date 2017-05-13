@@ -1,5 +1,5 @@
-const { Component } = require('react');
-const React = require('react');
+let { Component } = require('react');
+let React = require('react');
 
 class OptionsMenuView extends Component {
     constructor(props) {

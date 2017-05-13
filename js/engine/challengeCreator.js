@@ -1,22 +1,22 @@
-const Challenge = require('./challenge');
+let Challenge = require('./challenge');
 
-var challengeCreator = function (level, questionsAmount, maxTime, fetcher) {    
+let challengeCreator = function (level, questionsAmount, maxTime, fetcher) {    
     if (typeof (fetcher) == 'function') return Promise.resolve(new Challenge(level, fetcher(), maxTime));
     else return fetch(firebase.app().options.databaseURL + '/questions.json?orderBy="level"&equalTo="' + level + '"')
         .then(function (response) {
             return response.json();
         }).then(function (json) {
-            var questions = [];
+            let questions = [];
             function pickRandomProperty(obj) {
-                var result;
-                var count = 0;
+                let result;
+                let count = 0;
                 for (var prop in obj)
                     if (Math.random() < 1 / ++count)
                         result = prop;
                 return result;
             }
 
-            var randomPick = null;
+            let randomPick = null;
             for (var count = 0; count < questionsAmount; count++) {
                 randomPick = pickRandomProperty(json);
                 if (randomPick == null) break;

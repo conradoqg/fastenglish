@@ -1,7 +1,7 @@
-const { Component } = require('react');
-const React = require('react');
-const ChallengingView = require('./challengingView');
-const ChallengeResultView = require('./challengeResultView');
+let { Component } = require('react');
+let React = require('react');
+let ChallengingView = require('./challengingView');
+let ChallengeResultView = require('./challengeResultView');
 
 class ChallengeView extends Component {
     constructor(props) {
@@ -25,8 +25,7 @@ class ChallengeView extends Component {
         this.state.challenge.emitter.removeListener('state', this.updateState);
     }
 
-    updateState(state) {
-        console.log(`challenge state changed to ${state}`);
+    updateState(state) {        
         this.setState({ challenge: this.state.challenge });
     }    
 

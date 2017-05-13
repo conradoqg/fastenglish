@@ -1,4 +1,4 @@
-const EventEmitter = require('events').EventEmitter;
+let EventEmitter = require('events').EventEmitter;
 
 class HistoryStorage {
     constructor() {
