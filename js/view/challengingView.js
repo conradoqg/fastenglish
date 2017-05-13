@@ -10,12 +10,19 @@ class ChallengingView extends Component {
             challenge: props.challenge,
             lastQuestionResult: ''
         };
+        this.componentWillMount = this.componentWillMount.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
+        this.updateChallengeState = this.updateChallengeState.bind(this);
         this.anwserHandle = this.anwserHandle.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
         this.respondHandle = this.respondHandle.bind(this);
         this.render = this.render.bind(this);
+    }
+
+    componentWillMount() {
+        this.state.challenge.emitter.on('state', this.updateChallengeState);
+        this.state.challenge.emitter.on('newQuestion', this.updateChallengeState);
     }
 
     componentDidMount() {
@@ -25,7 +32,6 @@ class ChallengingView extends Component {
                 this.props.progressChanged((100 * this.props.challenge.elapsedSeconds()) / this.props.challenge.maxTime);
             } else if (this.props.challenge.state == 'ENDED') {
                 clearInterval(this.interval);
-                this.setState({ challenge: this.props.challenge });
                 this.props.progressChanged(100);
             }
         }, 10);
@@ -33,6 +39,13 @@ class ChallengingView extends Component {
 
     componentWillUnmount() {
         if (this.interval) clearInterval(this.interval);
+        this.state.challenge.emitter.removeListener('state', this.updateChallengeState);
+        this.state.challenge.emitter.removeListener('newQuestion', this.updateChallengeState);
+    }
+
+    updateChallengeState() {
+        console.log('challenge changed.');
+        this.setState({ challenge: this.state.challenge });
     }
 
     anwserHandle(event) {
@@ -66,7 +79,6 @@ class ChallengingView extends Component {
 
         this.setState({
             anwser: '',
-            challenge: this.props.challenge,
             lastQuestionResult: result
         });
     }
@@ -89,32 +101,20 @@ class ChallengingView extends Component {
         let lastQuestionResult = this.renderLastQuestionResult();
         let toRender = null;
 
-        if (this.props.challenge.state == 'CREATED' || this.props.challenge.state == 'RUNNING') {
-            toRender = (
-                <div>
-                    <div className='middle'>
-                        <h2>{this.state.challenge.qaPair[this.state.challenge.currentQuestion].question}</h2>
-                        <label>Anwser:
-              <input type='text' autoFocus id='anwserButton' className='textboxDefault' value={this.state.anwser} onChange={this.anwserHandle} onKeyPress={this.handleKeyPress} placeholder='Your anwser' />
-                        </label>
-                        <input type='button' className="btnDefault" onClick={this.respondHandle} value='Next!' />
-                    </div>
-                    <div className='middle-bottom'>
-                        {lastQuestionResult}
-                    </div>
-                </div>
-            );
-        } else {
-            toRender = (
+        toRender = (
+            <div>
                 <div className='middle'>
-                    <h2>Challenge Ended!</h2>
-                    <div className='middle-bottom'>
-                        {lastQuestionResult}
-                    </div>
-                    <input type='button' className="btnDefault" onClick={this.props.challengeEnded} autoFocus value='Check Results' />
+                    <h2>{this.state.challenge.qaPair[this.state.challenge.currentQuestion].question}</h2>
+                    <label>Anwser:
+              <input type='text' autoFocus id='anwserButton' className='textboxDefault' value={this.state.anwser} onChange={this.anwserHandle} onKeyPress={this.handleKeyPress} placeholder='Your anwser' />
+                    </label>
+                    <input type='button' className="btnDefault" onClick={this.respondHandle} value='Next!' />
                 </div>
-            );
-        }
+                <div className='middle-bottom'>
+                    {lastQuestionResult}
+                </div>
+            </div>
+        );
 
         return (
             <div>

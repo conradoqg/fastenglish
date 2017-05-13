@@ -83,6 +83,7 @@ class Challenge {
 
         if (this.currentQuestion == null) this.currentQuestion = 0;
         else this.currentQuestion++;
+        this.emitter.emit('newQuestion');
     }
 
     hasNextQuestion() {
