@@ -1,7 +1,7 @@
 # Fast English
 > A retro-game-ish-like English test that teaches through repetition.
 
-You can view a live version of the app [here](https://rawgit.com/conradoqg/fastenglish/v0.2/index.html).
+You can view a live version of the app [here](https://cdn.rawgit.com/conradoqg/fastenglish/62554ad3/index.html).
 
 ## Contribute
 
