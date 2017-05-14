@@ -1,6 +1,6 @@
 let Challenge = require('./challenge');
-let fetch = typeof variable !== 'undefined'  ? fetch : null;
-let firebase = typeof variable !== 'undefined'  ? firebase : null;
+let fetch = (typeof window !== 'undefined' && typeof window.fetch !== 'undefined'  ? window.fetch : null);
+let firebase = (typeof window !== 'undefined'&& typeof window.firebase !== 'undefined'  ? window.firebase : null);
 
 let challengeCreator = function (level, questionsAmount, maxTime) {
     return fetch(firebase.app().options.databaseURL + '/questions.json?orderBy="level"&equalTo="' + level + '"')
