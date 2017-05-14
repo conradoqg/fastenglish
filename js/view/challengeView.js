@@ -25,7 +25,7 @@ class ChallengeView extends Component {
         this.state.challenge.emitter.removeListener('state', this.updateState);
     }
 
-    updateState(state) {        
+    updateState() {        
         this.setState({ challenge: this.state.challenge });
     }    
 

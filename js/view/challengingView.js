@@ -25,7 +25,7 @@ class ChallengingView extends Component {
         this.state.challenge.emitter.on('newQuestion', this.updateChallengeState);
     }
 
-    componentDidMount() {
+    componentDidMount() {        
         this.interval = setInterval(() => {
             if (this.props.challenge.state == 'RUNNING') {
                 this.props.challenge.checkIfChallengedTimedout();
@@ -37,25 +37,53 @@ class ChallengingView extends Component {
         }, 10);
     }
 
+    componentDidUpdate() {
+        if (this.state.anwser == '') {
+            $('[id^=label]').first().focus();
+        }
+    }
+
     componentWillUnmount() {
-        if (this.interval) clearInterval(this.interval);
         this.state.challenge.emitter.removeListener('state', this.updateChallengeState);
         this.state.challenge.emitter.removeListener('newQuestion', this.updateChallengeState);
     }
 
-    updateChallengeState() {        
+    updateChallengeState() {
         this.setState({ challenge: this.state.challenge });
     }
 
     anwserHandle(event) {
         this.setState({
-            anwser: event.target.value
+            anwser: event.target.value || event.target.attributes['value'].value
         });
     }
 
-    handleKeyPress(event) {
+    handleKeyPress(event, previousId, nextId, topId, bottomId) {
         if (event.key == 'Enter') {
+            event.preventDefault();
             this.respondHandle();
+        }
+
+        let el = null;
+        
+        // TODO: Transform this to a mixin
+        if (event.key == 'ArrowRight' && nextId) { // KEY_RIGHT
+            el = $('#' + nextId);
+        }
+        if (event.key == 'ArrowLeft' && previousId) { // KEY_LEFT
+            el = $('#' + previousId);
+        }
+        if (event.key == 'ArrowUp' && topId) { // KEY_UP
+            el = $('#' + topId);
+        }
+        if (event.key == 'ArrowDown' && bottomId) { // KEY_DOWN
+            el = $('#' + bottomId);
+        }
+
+        if (el) {
+            event.preventDefault();
+            el.focus();
+            return false;
         }
     }
 
@@ -64,16 +92,8 @@ class ChallengingView extends Component {
 
         if (result != null) {
             this.props.challenge.nextQuestion();
-            if (result.isCorrect) {
-                Theming.getSound('success').play();
-                setTimeout(function () {
-                    $('#anwserButton').velocity({
-                        borderBottomColor: Theming.rgbToHex(Theming.getColor('positive'))
-                    }, 300).velocity({
-                        borderBottomColor: Theming.rgbToHex(Theming.getColor('frontcolor'))
-                    }, 1000);
-                }, 200);
-            } else Theming.getSound('fail').play();
+            if (result.isCorrect) Theming.getSound('success').play();                
+            else Theming.getSound('fail').play();
         }
 
         this.setState({
@@ -97,18 +117,35 @@ class ChallengingView extends Component {
     }
 
     renderQuestion() {
-        return (<div>
-            <h2>{this.state.challenge.qaPair[this.state.challenge.currentQuestion].question}</h2>
-            <label>Anwser:
-              <input type='text' autoFocus id='anwserButton' className='textboxDefault' value={this.state.anwser} onChange={this.anwserHandle} onKeyPress={this.handleKeyPress} placeholder='Your anwser' />
-            </label>
-            <input type='button' className="btnDefault" onClick={this.respondHandle} value='Next!' />
-        </div>);
+        let qaPair = this.state.challenge.qaPair[this.state.challenge.currentQuestion];
+        if (qaPair.type == 'simple') {
+            return (<div>
+                <h2>{qaPair.question}</h2>
+                <label>Anwser:
+                    <input type='text' autoFocus id='anwserButton' className='textboxDefault' value={this.state.anwser} onChange={this.anwserHandle} onKeyPress={this.handleKeyPress} placeholder='Your anwser' />
+                </label>
+                <input type='button' className="btnDefault" onClick={this.respondHandle} value='Next!' />
+            </div>);
+        } else if (qaPair.type == 'choice') {
+            let prev = (array, index) => { return (index - 1 < 0 ? array.length : index - 1); };
+            let next = (array, index) => { return (index + 1 == array.length ? 0 : index + 1); };
+            return (<div>
+                <h2>{qaPair.question}</h2>
+                <label>Anwser: {qaPair.options.map((option, index) => {
+                    let anwser = (this.state.anwser == '' && index == 0 ? option : this.state.anwser);
+                    return (<div key={index} style={{ display: 'inline' }}>
+                        <input type="radio" id={'anwser' + option} name={'awnser' + option} className='radioDefault' value={option} checked={option == anwser} onChange={this.anwserHandle} /><label id={'label' + option} htmlFor={'anwser' + option} tabIndex='0' onFocus={this.anwserHandle} value={option} onKeyDown={(e) => { return this.handleKeyPress(e, 'label' + qaPair.options[prev(qaPair.options, index)], 'label' + qaPair.options[next(qaPair.options, index)]); }}> <span></span> {option} </label>
+                    </div>);
+                })}
+                </label>
+                <input type='button' className="btnDefault" onClick={this.respondHandle} value='Next!' />
+            </div >);
+        }
     }
 
     render() {
         let lastQuestionResult = this.renderLastQuestionResult();
-        let question = this.renderQuestion();        
+        let question = this.renderQuestion();
 
         return (
             <div>
