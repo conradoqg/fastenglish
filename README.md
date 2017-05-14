@@ -1,5 +1,5 @@
 # Fast English
->A retro-game-ish-like English test that teaches through repetition.
+> A retro-game-ish-like English test that teaches through repetition.
 
 You can view a live version of the app [here](http://fastenglish.conradoqg.eti.br).
 
@@ -11,17 +11,17 @@ Send a pull request to this repository, updating the `data/questions.json` with 
 
 ### For English Ninjas
 
-Open a issue [here](https://gitlab.com/conradoqg/fastenglish/issues) suggesting new questions.
+Open a issue [here](https://github.com/conradoqg/fastenglish/issues) suggesting new questions.
 
 ### Issues
 
-When you find issues, please report them [here](https://gitlab.com/conradoqg/fastenglish/issues).
+When you find issues, please report them [here](https://github.com/conradoqg/fastenglish/issues).
 
 ## Deploying your own version
 
 ### Steps
 1. Create a [Firebase](http://firebase.google.com) account and update the HTML files with your firebase config;
-2. Set the rule bellow to the main database, replacing the `<admin_uid>` with a UID of an admin user;
+2. Set the rule bellow to the main database, replacing the `<admin_uid>` with an UID of an admin user;
 ```json
 {
   "rules": {
@@ -34,8 +34,8 @@ When you find issues, please report them [here](https://gitlab.com/conradoqg/fas
 }
 ```
 3. Add your domain to the firebase database;
-4. You need to serve the app using a static web server;
-5. Access the `admin.html` page to login (using admin e-mail and password) and populate the database;
+4. Serve the app with `npm start`;
+5. Access the `admin` menu inside `options` to login (using admin e-mail and password) and populate the database;
 
 ## Contribution and License Agreement
 
