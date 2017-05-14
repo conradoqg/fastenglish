@@ -1,8 +1,9 @@
 let Challenge = require('./challenge');
+let fetch = typeof variable !== 'undefined'  ? fetch : null;
+let firebase = typeof variable !== 'undefined'  ? firebase : null;
 
-let challengeCreator = function (level, questionsAmount, maxTime, fetcher) {    
-    if (typeof (fetcher) == 'function') return Promise.resolve(new Challenge(level, fetcher(), maxTime));
-    else return fetch(firebase.app().options.databaseURL + '/questions.json?orderBy="level"&equalTo="' + level + '"')
+let challengeCreator = function (level, questionsAmount, maxTime) {
+    return fetch(firebase.app().options.databaseURL + '/questions.json?orderBy="level"&equalTo="' + level + '"')
         .then(function (response) {
             return response.json();
         }).then(function (json) {

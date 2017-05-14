@@ -8,8 +8,8 @@ class GameEngine {
         this.emitter = new EventEmitter();
     }
 
-    start(level, questionsAmount, maxTime, endOnTimeout, fetcherMock) {
-        return challengeCreator(level, questionsAmount, maxTime, fetcherMock).then((challenge) => {
+    start(level, questionsAmount, maxTime, endOnTimeout) {
+        return challengeCreator(level, questionsAmount, maxTime).then((challenge) => {
             this.gameState.runningChallenge = challenge;
             this.gameState.runningChallenge.start(endOnTimeout);
             this.setState('CHALLENGING');
