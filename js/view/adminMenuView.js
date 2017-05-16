@@ -1,5 +1,6 @@
 let { Component } = require('react');
 let React = require('react');
+let KeyboardNavigation = require('./keyboardNavigation');
 
 class AdminMenuView extends Component {
     constructor(props) {
@@ -91,7 +92,7 @@ class AdminMenuView extends Component {
         this.setState({ password: event.target.value });
     }
 
-    login(username, password) {        
+    login(username, password) {
         firebase.auth().signInWithEmailAndPassword(username, password).then((result) => {
             this.setState({
                 username: '',
@@ -111,7 +112,7 @@ class AdminMenuView extends Component {
         });
     }
 
-    logout() {        
+    logout() {
         firebase.auth().signOut().then(() => {
             this.setState({
                 logged: false,
@@ -129,38 +130,35 @@ class AdminMenuView extends Component {
         this.props.changeMenuTo('OPTIONS');
     }
 
-    handleKeyPress(e, previousId, nextId, topId, bottomId) {
-        let el = null;
-
-        if (e.keyCode == 39 && nextId) { // KEY_RIGHT
-            el = $('#' + nextId);
-        }
-        if (e.keyCode == 37 && previousId) { // KEY_LEFT
-            el = $('#' + previousId);
-        }
-        if (e.keyCode == 38 && topId) { // KEY_UP
-            el = $('#' + topId);
-        }
-        if (e.keyCode == 40 && bottomId) { // KEY_DOWN
-            el = $('#' + bottomId);
-        }
-
-        if (el) {
-            el.focus();
-            return false;
-        }
-    }
-
     render() {
         let content = null;
-        let message = null;        
+        let message = null;
 
         if (this.state.isLogging) {
+            let onKeyDownUserTextbox = KeyboardNavigation.createKeyDownHandler({
+                'ArrowLeft': 'btnConfirm',
+                'ArrowRight': 'passwordText',
+                'ArrowUp': 'btnBack',
+                'ArrowDown': 'btnLogin'
+            });
+            let onKeyDownPasswordTextbox = KeyboardNavigation.createKeyDownHandler({
+                'ArrowLeft': 'usernameText',
+                'ArrowRight': 'btnConfirm',
+                'ArrowUp': 'btnBack',
+                'ArrowDown': 'btnLogin'
+            });
+            let onKeyDownConfirmButton = KeyboardNavigation.createKeyDownHandler({
+                'ArrowLeft': 'passwordText',
+                'ArrowRight': 'usernameText',
+                'ArrowUp': 'btnBack',
+                'ArrowDown': 'btnLogin'
+            });
+
             content = (
                 <form>
-                    <label>User: <input tabIndex='1' id='usernameText' autoFocus type='text' className='textboxDefault' value={this.state.username} onChange={this.onChangeUsername} placeholder='Username' onKeyDown={(e) => { return this.handleKeyPress(e, 'btnConfirm', 'passwordText', 'btnBack', 'btnLogin'); }} /></label>
-                    <label>Password: <input type='password' id='passwordText' tabIndex='2' className='textboxDefault' value={this.state.password} onChange={this.onChangePassword} placeholder='' onKeyDown={(e) => { return this.handleKeyPress(e, 'usernameText', 'btnConfirm', 'btnBack', 'btnLogin'); }} /></label>
-                    <input type='button' id='btnConfirm' tabIndex='3' className='btnDefault' onClick={this.onConfirmLogin} value='Confirm' onKeyDown={(e) => { return this.handleKeyPress(e, 'passwordText', 'usernameText', 'btnBack', 'btnLogin'); }} />
+                    <label>User: <input tabIndex='1' id='usernameText' autoFocus type='text' className='textboxDefault' value={this.state.username} onChange={this.onChangeUsername} placeholder='Username' onKeyDown={onKeyDownUserTextbox} /></label>
+                    <label>Password: <input type='password' id='passwordText' tabIndex='2' className='textboxDefault' value={this.state.password} onChange={this.onChangePassword} placeholder='' onKeyDown={onKeyDownPasswordTextbox} /></label>
+                    <input type='button' id='btnConfirm' tabIndex='3' className='btnDefault' onClick={this.onConfirmLogin} value='Confirm' onKeyDown={onKeyDownConfirmButton} />
                 </form>
             );
         }

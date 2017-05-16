@@ -1,6 +1,7 @@
 let { Component } = require('react');
 let Theming = require('../util/theming');
 let React = require('react');
+let KeyboardNavigation = require('./keyboardNavigation');
 
 class ChallengingView extends Component {
     constructor(props) {
@@ -15,8 +16,7 @@ class ChallengingView extends Component {
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.updateChallengeState = this.updateChallengeState.bind(this);
         this.anwserHandle = this.anwserHandle.bind(this);
-        this.handleKeyPress = this.handleKeyPress.bind(this);
-        this.respondHandle = this.respondHandle.bind(this);
+        this.responseHandler = this.responseHandler.bind(this);
         this.render = this.render.bind(this);
     }
 
@@ -25,7 +25,7 @@ class ChallengingView extends Component {
         this.state.challenge.emitter.on('newQuestion', this.updateChallengeState);
     }
 
-    componentDidMount() {        
+    componentDidMount() {
         this.interval = setInterval(() => {
             if (this.props.challenge.state == 'RUNNING') {
                 this.props.challenge.checkIfChallengedTimedout();
@@ -58,41 +58,12 @@ class ChallengingView extends Component {
         });
     }
 
-    handleKeyPress(event, previousId, nextId, topId, bottomId) {
-        if (event.key == 'Enter') {
-            event.preventDefault();
-            this.respondHandle();
-        }
-
-        let el = null;
-        
-        // TODO: Transform this to a mixin
-        if (event.key == 'ArrowRight' && nextId) { // KEY_RIGHT
-            el = $('#' + nextId);
-        }
-        if (event.key == 'ArrowLeft' && previousId) { // KEY_LEFT
-            el = $('#' + previousId);
-        }
-        if (event.key == 'ArrowUp' && topId) { // KEY_UP
-            el = $('#' + topId);
-        }
-        if (event.key == 'ArrowDown' && bottomId) { // KEY_DOWN
-            el = $('#' + bottomId);
-        }
-
-        if (el) {
-            event.preventDefault();
-            el.focus();
-            return false;
-        }
-    }
-
-    respondHandle() {
+    responseHandler() {
         let result = this.props.challenge.anwserQuestion(this.state.anwser);
 
         if (result != null) {
             this.props.challenge.nextQuestion();
-            if (result.isCorrect) Theming.getSound('success').play();                
+            if (result.isCorrect) Theming.getSound('success').play();
             else Theming.getSound('fail').play();
         }
 
@@ -119,12 +90,15 @@ class ChallengingView extends Component {
     renderQuestion() {
         let qaPair = this.state.challenge.qaPair[this.state.challenge.currentQuestion];
         if (qaPair.type == 'simple') {
+            let onKeyDown = KeyboardNavigation.createKeyDownHandler({
+                'Enter': this.responseHandler
+            });
             return (<div>
                 <h2>{qaPair.question}</h2>
                 <label>Anwser:
-                    <input type='text' autoFocus id='anwserButton' className='textboxDefault' value={this.state.anwser} onChange={this.anwserHandle} onKeyPress={this.handleKeyPress} placeholder='Your anwser' />
+                    <input type='text' autoFocus id='anwserButton' className='textboxDefault' value={this.state.anwser} onChange={this.anwserHandle} onKeyDown={onKeyDown} placeholder='Your anwser' />
                 </label>
-                <input type='button' className="btnDefault" onClick={this.respondHandle} value='Next!' />
+                <input type='button' className="btnDefault" onClick={this.responseHandler} value='Next!' />
             </div>);
         } else if (qaPair.type == 'choice') {
             let prev = (array, index) => { return (index - 1 < 0 ? array.length : index - 1); };
@@ -133,12 +107,17 @@ class ChallengingView extends Component {
                 <h2>{qaPair.question}</h2>
                 <label>Anwser: {qaPair.options.map((option, index) => {
                     let anwser = (this.state.anwser == '' && index == 0 ? option : this.state.anwser);
+                    let onKeyDown = KeyboardNavigation.createKeyDownHandler({
+                        'Enter': this.responseHandler,
+                        'ArrowLeft': 'label' + qaPair.options[prev(qaPair.options, index)],
+                        'ArrowRight': 'label' + qaPair.options[next(qaPair.options, index)]
+                    });
                     return (<div key={index} style={{ display: 'inline' }}>
-                        <input type="radio" id={'anwser' + option} name={'awnser' + option} className='radioDefault' value={option} checked={option == anwser} onChange={this.anwserHandle} /><label id={'label' + option} htmlFor={'anwser' + option} tabIndex='0' onFocus={this.anwserHandle} value={option} onKeyDown={(e) => { return this.handleKeyPress(e, 'label' + qaPair.options[prev(qaPair.options, index)], 'label' + qaPair.options[next(qaPair.options, index)]); }}> <span></span> {option} </label>
+                        <input type="radio" id={'anwser' + option} name={'awnser' + option} className='radioDefault' value={option} checked={option == anwser} onChange={this.anwserHandle} /><label id={'label' + option} htmlFor={'anwser' + option} tabIndex='0' onFocus={this.anwserHandle} value={option} onKeyDown={onKeyDown}> <span></span> {option} </label>
                     </div>);
                 })}
                 </label>
-                <input type='button' className="btnDefault" onClick={this.respondHandle} value='Next!' />
+                <input type='button' className="btnDefault" onClick={this.responseHandler} value='Next!' />
             </div >);
         }
     }

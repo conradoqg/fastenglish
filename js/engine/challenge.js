@@ -34,9 +34,9 @@ class Challenge {
         }
     }
 
-    setState(newState) {
+    setState(newState) {        
         this.state = newState;
-        this.emitter.emit('state', newState);
+        this.emitter.emit('state', newState);        
     }
 
     restart() {

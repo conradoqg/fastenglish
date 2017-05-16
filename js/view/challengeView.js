@@ -13,7 +13,7 @@ class ChallengeView extends Component {
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.updateState = this.updateState.bind(this);
         this.restartChallenge = this.restartChallenge.bind(this);
-        this.endGame = this.endGame.bind(this);        
+        this.endGame = this.endGame.bind(this);
         this.render = this.render.bind(this);
     }
 
@@ -25,16 +25,16 @@ class ChallengeView extends Component {
         this.state.challenge.emitter.removeListener('state', this.updateState);
     }
 
-    updateState() {        
+    updateState() {
         this.setState({ challenge: this.state.challenge });
-    }    
-
-    restartChallenge() {
-        this.props.challenge.restart();        
     }
 
-    endGame() {        
-        this.props.engine.end();        
+    restartChallenge() {
+        this.props.challenge.restart();
+    }
+
+    endGame() {
+        this.props.engine.end();
     }
 
     render() {

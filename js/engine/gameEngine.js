@@ -16,16 +16,16 @@ class GameEngine {
         });
     }
 
-    end() {        
+    end() {                
         if (this.gameState.runningChallenge) this.gameState.runningChallenge.stop();
         this.historyStorage.add(this.gameState.runningChallenge.results);
         this.gameState.runningChallenge = null;
         this.setState('MENU');        
     }    
 
-    setState(newState) {
+    setState(newState) {        
         this.gameState.state = newState;
-        this.emitter.emit('state', newState);
+        this.emitter.emit('state', newState);        
     }
 }
 

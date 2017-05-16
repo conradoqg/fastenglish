@@ -1,27 +1,27 @@
 let { Component } = require('react');
 let React = require('react');
+let KeyboardNavigation = require('./keyboardNavigation');
 
 class MainMenuView extends Component {
     constructor(props) {
         super(props);
         this.state = {
             loading: false,
-            selectedDificulty: 'EASY',
+            selectedDifficulty: 'EASY',
             selectedQuestionsAmount: '30',
             selectedMaxSeconds: '300000'
         };
-        this.toggleDificultyChange = this.toggleDificultyChange.bind(this);
+        this.toggleDifficultyChange = this.toggleDifficultyChange.bind(this);
         this.toggleQuestionsAmountChange = this.toggleQuestionsAmountChange.bind(this);
         this.toggleMaxSecondsChange = this.toggleMaxSecondsChange.bind(this);
         this.startChallengeHandler = this.startChallengeHandler.bind(this);
-        this.optionsHandler = this.optionsHandler.bind(this);
-        this.handleKeyPress = this.handleKeyPress.bind(this);
+        this.optionsHandler = this.optionsHandler.bind(this);        
         this.render = this.render.bind(this);
     }
 
-    toggleDificultyChange(event) {
+    toggleDifficultyChange(event) {
         this.setState({
-            selectedDificulty: event.target.value
+            selectedDifficulty: event.target.value
         });
     }
 
@@ -37,62 +37,111 @@ class MainMenuView extends Component {
         });
     }
 
-    startChallengeHandler() {        
+    startChallengeHandler() {
         this.setState({
             loading: true
         });
-        this.props.engine.start(this.state.selectedDificulty, this.state.selectedQuestionsAmount, this.state.selectedMaxSeconds, true);
+        this.props.engine.start(this.state.selectedDifficulty, this.state.selectedQuestionsAmount, this.state.selectedMaxSeconds, true);
     }
 
     optionsHandler() {
         this.props.changeMenuTo('OPTIONS');
     }
 
-    handleKeyPress(e, previousId, nextId, topId, bottomId) {
-        let el = null;
-
-        if (e.keyCode == 39 && nextId) { // KEY_RIGHT
-            el = $('#' + nextId);
-        }
-        if (e.keyCode == 37 && previousId) { // KEY_LEFT
-            el = $('#' + previousId);
-        }
-        if (e.keyCode == 38 && topId) { // KEY_UP
-            el = $('#' + topId);
-        }
-        if (e.keyCode == 40 && bottomId) { // KEY_DOWN
-            el = $('#' + bottomId);
-        }
-
-        if (el) {
-            el.focus();
-            return false;
-        }
+    checkOnFocus(event) {
+        $(`#${event.target.htmlFor}`).prop('checked', true);
     }
 
     render() {
+        let onKeyDownDifficultyEasyRadio = KeyboardNavigation.createKeyDownHandler({
+            'ArrowLeft': 'labelDifficultyHard',
+            'ArrowRight': 'labelDifficultyMedium',
+            'ArrowUp': 'btnOptions',
+            'ArrowDown': 'labelQuestionsLow'
+        });
+        let onKeyDownDifficultyMediumRadio = KeyboardNavigation.createKeyDownHandler({
+            'ArrowLeft': 'labelDifficultyEasy',
+            'ArrowRight': 'labelDifficultyHard',
+            'ArrowUp': 'btnOptions',
+            'ArrowDown': 'labelQuestionsMiddle'
+        });
+        let onKeyDownDifficultyHardRadio = KeyboardNavigation.createKeyDownHandler({
+            'ArrowLeft': 'labelDifficultyMedium',
+            'ArrowRight': 'labelDifficultyEasy',
+            'ArrowUp': 'btnOptions',
+            'ArrowDown': 'labelQuestionsHight'
+        });
+        let onKeyDownQuestionsLowRadio = KeyboardNavigation.createKeyDownHandler({
+            'ArrowLeft': 'labelQuestionsHight',
+            'ArrowRight': 'labelQuestionsMiddle',
+            'ArrowUp': 'labelDifficultyEasy',
+            'ArrowDown': 'labelTargetTimeLow'
+        });
+        let onKeyDownQuestionsMiddleRadio = KeyboardNavigation.createKeyDownHandler({
+            'ArrowLeft': 'labelQuestionsLow',
+            'ArrowRight': 'labelQuestionsHight',
+            'ArrowUp': 'labelDifficultyMedium',
+            'ArrowDown': 'labelTargetTimeMiddle'
+        });
+        let onKeyDownQuestionsHightRadio = KeyboardNavigation.createKeyDownHandler({
+            'ArrowLeft': 'labelQuestionsMiddle',
+            'ArrowRight': 'labelQuestionsLow',
+            'ArrowUp': 'labelDifficultyHard',
+            'ArrowDown': 'labelTargetTimeHight'
+        });
+        let onKeyDownTargetTimeLowRadio = KeyboardNavigation.createKeyDownHandler({
+            'ArrowLeft': 'labelTargetTimeHight',
+            'ArrowRight': 'labelTargetTimeMiddle',
+            'ArrowUp': 'labelQuestionsLow',
+            'ArrowDown': 'btnStart'
+        });
+        let onKeyDownTargetTimeMiddleRadio = KeyboardNavigation.createKeyDownHandler({
+            'ArrowLeft': 'labelTargetTimeLow',
+            'ArrowRight': 'labelTargetTimeHight',
+            'ArrowUp': 'labelQuestionsMiddle',
+            'ArrowDown': 'btnStart'
+        });
+        let onKeyDownTargetTimeHightRadio = KeyboardNavigation.createKeyDownHandler({
+            'ArrowLeft': 'labelTargetTimeMiddle',
+            'ArrowRight': 'labelTargetTimeLow',
+            'ArrowUp': 'labelQuestionsHight',
+            'ArrowDown': 'btnStart'
+        });
+        let onKeyDownStartButton = KeyboardNavigation.createKeyDownHandler({
+            'ArrowLeft': 'btnOptions',
+            'ArrowRight': 'btnOptions',
+            'ArrowUp': 'labelTargetTimeLow',
+            'ArrowDown': 'labelDifficultyEasy'
+        });
+        let onKeyDownOptionsButton = KeyboardNavigation.createKeyDownHandler({
+            'ArrowLeft': 'btnStart',
+            'ArrowRight': 'btnStart',
+            'ArrowUp': 'labelTargetTimeLow',
+            'ArrowDown': 'labelDifficultyEasy'
+        });
+
         return (
             <div className='middle'>
                 <label className='optionGroupTitle'>
-                    <span className='title'>Dificulty: </span>
-                    <input type="radio" id='dificultyEasy' name='dificulty' className='radioDefault' value="EASY" checked={(this.state.selectedDificulty == 'EASY')} onChange={this.toggleDificultyChange} /><label id='labelDificultyEasy' htmlFor='dificultyEasy' tabIndex='0' onFocus={() => $('#dificultyEasy').prop('checked', true)} onKeyDown={(e) => { return this.handleKeyPress(e, 'labelDificultyHard', 'labelDificultyMedium', 'btnOptions', 'labelQuestionsLow'); }}> <span></span> EASY </label>
-                    <input type="radio" id='dificultyMedium' name='dificulty' className='radioDefault' value="MEDIUM" checked={(this.state.selectedDificulty == 'MEDIUM')} onChange={this.toggleDificultyChange} /><label id='labelDificultyMedium' htmlFor='dificultyMedium' tabIndex='1' onFocus={() => $('#dificultyMedium').prop('checked', true)} onKeyDown={(e) => { return this.handleKeyPress(e, 'labelDificultyEasy', 'labelDificultyHard', 'btnOptions', 'labelQuestionsMiddle'); }}> <span></span> MEDIUM </label>
-                    <input type="radio" id='dificultyHard' name='dificulty' className='radioDefault' value="HARD" checked={(this.state.selectedDificulty == 'HARD')} onChange={this.toggleDificultyChange} /><label id='labelDificultyHard' htmlFor='dificultyHard' tabIndex='2' onFocus={() => $('#dificultyHard').prop('checked', true)} onKeyDown={(e) => { return this.handleKeyPress(e, 'labelDificultyMedium', 'labelDificultyEasy', 'btnOptions', 'labelQuestionsHight'); }}> <span></span> HARD </label>
+                    <span className='title'>Difficulty: </span>
+                    <input type="radio" id='difficultyEasy' name='difficulty' className='radioDefault' value="EASY" checked={(this.state.selectedDifficulty == 'EASY')} onChange={this.toggleDifficultyChange} /><label id='labelDifficultyEasy' htmlFor='difficultyEasy' tabIndex='0' onFocus={this.checkOnFocus} onKeyDown={onKeyDownDifficultyEasyRadio}> <span></span> EASY </label>
+                    <input type="radio" id='difficultyMedium' name='difficulty' className='radioDefault' value="MEDIUM" checked={(this.state.selectedDifficulty == 'MEDIUM')} onChange={this.toggleDifficultyChange} /><label id='labelDifficultyMedium' htmlFor='difficultyMedium' tabIndex='1' onFocus={this.checkOnFocus} onKeyDown={onKeyDownDifficultyMediumRadio}> <span></span> MEDIUM </label>
+                    <input type="radio" id='difficultyHard' name='difficulty' className='radioDefault' value="HARD" checked={(this.state.selectedDifficulty == 'HARD')} onChange={this.toggleDifficultyChange} /><label id='labelDifficultyHard' htmlFor='difficultyHard' tabIndex='2' onFocus={this.checkOnFocus} onKeyDown={onKeyDownDifficultyHardRadio}> <span></span> HARD </label>
                 </label>
                 <label className='optionGroupTitle'>
                     <span className='title'>Questions Amount: </span>
-                    <input type="radio" id='questionsLow' name='questionsAmount' className='radioDefault' value="30" checked={(this.state.selectedQuestionsAmount == '30')} onChange={this.toggleQuestionsAmountChange} /><label id='labelQuestionsLow' htmlFor='questionsLow' tabIndex='3' onFocus={() => $('#questionsLow').prop('checked', true)} onKeyDown={(e) => { return this.handleKeyPress(e, 'labelQuestionsHight', 'labelQuestionsMiddle', 'labelDificultyEasy', 'labelTargetTimeLow'); }}> <span></span> 30 </label>
-                    <input type="radio" id='questionsMiddle' name='questionsAmount' className='radioDefault' value="60" checked={(this.state.selectedQuestionsAmount == '60')} onChange={this.toggleQuestionsAmountChange} /><label id='labelQuestionsMiddle' htmlFor='questionsMiddle' tabIndex='4' onFocus={() => $('#questionsMiddle').prop('checked', true)} onKeyDown={(e) => { return this.handleKeyPress(e, 'labelQuestionsLow', 'labelQuestionsHight', 'labelDificultyMedium', 'labelTargetTimeMiddle'); }}> <span></span> 60 </label>
-                    <input type="radio" id='questionsHight' name='questionsAmount' className='radioDefault' value="90" checked={(this.state.selectedQuestionsAmount == '90')} onChange={this.toggleQuestionsAmountChange} /><label id='labelQuestionsHight' htmlFor='questionsHight' tabIndex='5' onFocus={() => $('#questionsHight').prop('checked', true)} onKeyDown={(e) => { return this.handleKeyPress(e, 'labelQuestionsMiddle', 'labelQuestionsLow', 'labelDificultyHard', 'labelTargetTimeHight'); }} > <span></span> 90 </label>
+                    <input type="radio" id='questionsLow' name='questionsAmount' className='radioDefault' value="30" checked={(this.state.selectedQuestionsAmount == '30')} onChange={this.toggleQuestionsAmountChange} /><label id='labelQuestionsLow' htmlFor='questionsLow' tabIndex='3' onFocus={this.checkOnFocus} onKeyDown={onKeyDownQuestionsLowRadio}> <span></span> 30 </label>
+                    <input type="radio" id='questionsMiddle' name='questionsAmount' className='radioDefault' value="60" checked={(this.state.selectedQuestionsAmount == '60')} onChange={this.toggleQuestionsAmountChange} /><label id='labelQuestionsMiddle' htmlFor='questionsMiddle' tabIndex='4' onFocus={this.checkOnFocus} onKeyDown={onKeyDownQuestionsMiddleRadio}> <span></span> 60 </label>
+                    <input type="radio" id='questionsHight' name='questionsAmount' className='radioDefault' value="90" checked={(this.state.selectedQuestionsAmount == '90')} onChange={this.toggleQuestionsAmountChange} /><label id='labelQuestionsHight' htmlFor='questionsHight' tabIndex='5' onFocus={this.checkOnFocus} onKeyDown={onKeyDownQuestionsHightRadio} > <span></span> 90 </label>
                 </label>
                 <label className='optionGroupTitle'>
                     <span className='title'>Target Time (minutes): </span>
-                    <input type="radio" id='targetTimeLow' name='targetTime' className='radioDefault' value="300000" checked={(this.state.selectedMaxSeconds == '300000')} onChange={this.toggleMaxSecondsChange} /><label id='labelTargetTimeLow' htmlFor='targetTimeLow' tabIndex='6' onFocus={() => $('#targetTimeLow').prop('checked', true)} onKeyDown={(e) => { return this.handleKeyPress(e, 'labelTargetTimeHight', 'labelTargetTimeMiddle', 'labelQuestionsLow', 'btnStart'); }}> <span></span> 5 </label>
-                    <input type="radio" id='targetTimeMiddle' name='targetTime' className='radioDefault' value="600000" checked={(this.state.selectedMaxSeconds == '600000')} onChange={this.toggleMaxSecondsChange} /><label id='labelTargetTimeMiddle' htmlFor='targetTimeMiddle' tabIndex='7' onFocus={() => $('#targetTimeMiddle').prop('checked', true)} onKeyDown={(e) => { return this.handleKeyPress(e, 'labelTargetTimeLow', 'labelTargetTimeHight', 'labelQuestionsMiddle', 'btnStart'); }}> <span></span> 10 </label>
-                    <input type="radio" id='targetTimeHight' name='targetTime' className='radioDefault' value="900000" checked={(this.state.selectedMaxSeconds == '900000')} onChange={this.toggleMaxSecondsChange} /><label id='labelTargetTimeHight' htmlFor='targetTimeHight' tabIndex='8' onFocus={() => $('#targetTimeHight').prop('checked', true)} onKeyDown={(e) => { return this.handleKeyPress(e, 'labelTargetTimeMiddle', 'labelTargetTimeLow', 'labelQuestionsHight', 'btnStart'); }}> <span></span> 15 </label>
+                    <input type="radio" id='targetTimeLow' name='targetTime' className='radioDefault' value="300000" checked={(this.state.selectedMaxSeconds == '300000')} onChange={this.toggleMaxSecondsChange} /><label id='labelTargetTimeLow' htmlFor='targetTimeLow' tabIndex='6' onFocus={this.checkOnFocus} onKeyDown={onKeyDownTargetTimeLowRadio}> <span></span> 5 </label>
+                    <input type="radio" id='targetTimeMiddle' name='targetTime' className='radioDefault' value="600000" checked={(this.state.selectedMaxSeconds == '600000')} onChange={this.toggleMaxSecondsChange} /><label id='labelTargetTimeMiddle' htmlFor='targetTimeMiddle' tabIndex='7' onFocus={this.checkOnFocus} onKeyDown={onKeyDownTargetTimeMiddleRadio}> <span></span> 10 </label>
+                    <input type="radio" id='targetTimeHight' name='targetTime' className='radioDefault' value="900000" checked={(this.state.selectedMaxSeconds == '900000')} onChange={this.toggleMaxSecondsChange} /><label id='labelTargetTimeHight' htmlFor='targetTimeHight' tabIndex='8' onFocus={this.checkOnFocus} onKeyDown={onKeyDownTargetTimeHightRadio}> <span></span> 15 </label>
                 </label>
-                <input type='button' id='btnStart' className="btnDefault" autoFocus value={this.state.loading ? 'Loading...' : 'Start!'} disabled={this.state.loading} onClick={this.startChallengeHandler} tabIndex='9' onKeyDown={(e) => { return this.handleKeyPress(e, 'btnOptions', 'btnOptions', 'labelTargetTimeLow', 'labelDificultyEasy'); }} />
-                <input type='button' id='btnOptions' className="btnDefault" value='Options' onClick={this.optionsHandler} tabIndex='10' onKeyDown={(e) => { return this.handleKeyPress(e, 'btnStart', 'btnStart', 'labelTargetTimeLow', 'labelDificultyEasy'); }} />
+                <input type='button' id='btnStart' className="btnDefault" autoFocus value={this.state.loading ? 'Loading...' : 'Start!'} disabled={this.state.loading} onClick={this.startChallengeHandler} tabIndex='9' onKeyDown={onKeyDownStartButton} />
+                <input type='button' id='btnOptions' className="btnDefault" value='Options' onClick={this.optionsHandler} tabIndex='10' onKeyDown={onKeyDownOptionsButton} />
             </div>);
     }
 }
