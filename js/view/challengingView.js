@@ -101,19 +101,22 @@ class ChallengingView extends Component {
                 <input type='button' className="btnDefault" onClick={this.responseHandler} value='Next!' />
             </div>);
         } else if (qaPair.type == 'choice') {
-            let prev = (array, index) => { return (index - 1 < 0 ? array.length : index - 1); };
+            let prev = (array, index) => { return (index - 1 < 0 ? array.length - 1 : index - 1); };
             let next = (array, index) => { return (index + 1 == array.length ? 0 : index + 1); };
             return (<div>
                 <h2>{qaPair.question}</h2>
                 <label>Anwser: {qaPair.options.map((option, index) => {
+                    let generateId = (baseId, id) => {
+                        return baseId + id.replace('/', '').replace(' ', '');
+                    };
                     let anwser = (this.state.anwser == '' && index == 0 ? option : this.state.anwser);
                     let onKeyDown = KeyboardNavigation.createKeyDownHandler({
                         'Enter': this.responseHandler,
-                        'ArrowLeft': 'label' + qaPair.options[prev(qaPair.options, index)],
-                        'ArrowRight': 'label' + qaPair.options[next(qaPair.options, index)]
+                        'ArrowLeft': generateId('label', qaPair.options[prev(qaPair.options, index)]),
+                        'ArrowRight': generateId('label', qaPair.options[next(qaPair.options, index)])
                     });
                     return (<div key={index} style={{ display: 'inline' }}>
-                        <input type="radio" id={'anwser' + option} name={'awnser' + option} className='radioDefault' value={option} checked={option == anwser} onChange={this.anwserHandle} /><label id={'label' + option} htmlFor={'anwser' + option} tabIndex='0' onFocus={this.anwserHandle} value={option} onKeyDown={onKeyDown}> <span></span> {option} </label>
+                        <input type="radio" id={generateId('anwser', option)} name={generateId('awnser', option)} className='radioDefault' value={option} checked={option == anwser} onChange={this.anwserHandle} /><label id={generateId('label', option)} htmlFor={generateId('anwser', option)} tabIndex='0' onFocus={this.anwserHandle} value={option} onKeyDown={onKeyDown}> <span></span> {option} </label>
                     </div>);
                 })}
                 </label>
